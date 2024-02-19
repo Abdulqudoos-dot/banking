@@ -48,7 +48,7 @@ const Login = () => {
     try {
       // Replace 'your_login_api_endpoint' with your actual login API endpoint
       const response = await axios.post(
-        "http://localhost:5000/api/v1/auth/login",
+        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/auth/login",
         formData
       );
 

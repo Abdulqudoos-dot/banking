@@ -39,7 +39,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/v1/bank/getAllBanks"
+          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks"
         );
         if (response.ok) {
           const apiData = await response.json();
@@ -65,7 +65,7 @@ export default function Home() {
     } else {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/v1/bank/${rowId}`,
+          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${rowId}`,
           {
             method: "PUT",
             headers: {
@@ -100,7 +100,7 @@ export default function Home() {
   const handleDelete = async (rowId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/bank/${rowId}`,
+        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${rowId}`,
         {
           method: "DELETE",
           headers: {
@@ -245,8 +245,8 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/bank/addDetails`,
-        // `http://localhost:5000/api/v1/bank/${row._id}`,
+        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addDetails`,
+        // `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${row._id}`,
         {
           method: "POST",
           headers: {

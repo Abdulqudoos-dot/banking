@@ -37,7 +37,7 @@ const AddForm = () => {
     // Use Axios to send data (you may need to adjust the URL and method based on your server)
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/bank/addBank",
+        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addBank",
         formData
       );
       router.push("/", { scroll: false });

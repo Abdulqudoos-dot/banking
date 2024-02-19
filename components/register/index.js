@@ -49,7 +49,7 @@ const Register = () => {
     try {
       // Make API request using Axios
       const response = await axios.post(
-        "http://localhost:5000/api/v1/auth/register",
+        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/auth/register",
         formData
       );
 
