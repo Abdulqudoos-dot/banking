@@ -3,7 +3,7 @@ import Navbar from "@/components/navbar";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
-export default function home() {
+export default function Home() {
   const [data, setData] = useState([]);
   const [editingRowIndex, setEditingRowIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
