@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -54,10 +56,7 @@ const Login = () => {
       console.log(response.data);
 
       // Assuming your API returns a success message, you can show an alert to the user
-      alert("Login successful");
-
-      // Redirect to the form page
-      window.location.href = "/form";
+      router.push("pages/home");
     } catch (error) {
       console.error("Error logging in:", error.message);
 
