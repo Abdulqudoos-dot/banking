@@ -40,7 +40,7 @@ const AddForm = () => {
         "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addBank",
         formData
       );
-      router.push("pages/home", { scroll: false });
+      router.push("/pages/home");
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Error submitting form. Please try again later.");

@@ -60,7 +60,7 @@ const Register = () => {
       alert("User added successfully");
 
       // Redirect to the login page
-      window.location.href = "/";
+      window.location.href = "/pages/home";
     } catch (error) {
       console.error("Error registering user:", error.message);
       // Handle error response
@@ -143,7 +143,7 @@ const Register = () => {
         </form>
         <p className="text-center mt-4">
           Already have an account?{" "}
-          <Link href="login" className="text-blue-500">
+          <Link href="/pages/login" className="text-blue-500">
             Login here
           </Link>
         </p>

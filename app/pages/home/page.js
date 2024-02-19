@@ -258,6 +258,7 @@ export default function Home() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
+        setEditedData([]);
         // Handle any other logic after successful form submission
       } else {
         console.error("Failed to submit form:", response.statusText);
