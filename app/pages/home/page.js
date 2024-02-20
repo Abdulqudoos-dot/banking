@@ -257,7 +257,15 @@ export default function Home() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-        // Handle any other logic after successful form submission
+        setFormData({
+          checkNo: "",
+          payee: "",
+          memo: "",
+          category: "",
+          payment: "",
+          deposit: "",
+          amount: "",
+        });
       } else {
         console.error("Failed to submit form:", response.statusText);
       }
