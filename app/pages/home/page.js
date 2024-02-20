@@ -16,7 +16,7 @@ export default function Home() {
     usdBalance: "",
   });
   const [expandedRows, setExpandedRows] = useState(new Set());
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split("T")[0];
   const [formData, setFormData] = useState({
     date: currentDate,
     checkNo: "",
@@ -136,16 +136,16 @@ export default function Home() {
   const renderForm = (row) => {
     return (
       <form onSubmit={(e) => handleSubmit(e, row)}>
-   <textarea
-  type="date"
-  placeholder="Date"
-  className="border rounded px-2 py-1"
-  id="date"
-  name="date"
-  value={formData.date}
-  onChange={(e) => handleChange(e, row)}
-  required
-/>
+        <textarea
+          type="date"
+          placeholder="Date"
+          className="border rounded px-2 py-1"
+          id="date"
+          name="date"
+          value={formData.date}
+          onChange={(e) => handleChange(e, row)}
+          required
+        />
         <textarea
           type="text"
           placeholder="checkNo"
@@ -232,13 +232,12 @@ export default function Home() {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-      
     }));
   };
 
   const handleSubmit = async (e, row) => {
     e.preventDefault();
-    console.log(formData);
+    console.log(row);
     // const submitData = {
     //   ...row,
     //   formData: formData,
@@ -246,8 +245,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addDetails`,
-        // `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${row._id}`,
+        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addDetails/${row._id}`,
         {
           method: "POST",
           headers: {
@@ -259,7 +257,6 @@ export default function Home() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-        setEditedData([]);
         // Handle any other logic after successful form submission
       } else {
         console.error("Failed to submit form:", response.statusText);
