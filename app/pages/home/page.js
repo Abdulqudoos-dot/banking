@@ -39,7 +39,7 @@ export default function Home() {
     const fetchBankData = async () => {
       try {
         const response = await fetch(
-          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks"
+          "http://localhost:5000/api/v1/bank/getAllBanks"
         );
         if (response.ok) {
           const apiData = await response.json();
@@ -55,7 +55,7 @@ export default function Home() {
     const fetchBankDetail = async () => {
       try {
         const response = await fetch(
-          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks"
+          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks`
         );
         if (response.ok) {
           const apiData = await response.json();
