@@ -36,7 +36,23 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBankData = async () => {
+      try {
+        const response = await fetch(
+          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks"
+        );
+        if (response.ok) {
+          const apiData = await response.json();
+          setData(apiData.data);
+          setEditedData(apiData.data);
+        } else {
+          console.error("Failed to fetch data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during data fetch:", error);
+      }
+    };
+    const fetchBankDetail = async () => {
       try {
         const response = await fetch(
           "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks"
@@ -53,7 +69,7 @@ export default function Home() {
       }
     };
 
-    fetchData();
+    fetchBankData();
   }, []);
 
   const handleEdit = async (rowId) => {
@@ -136,7 +152,7 @@ export default function Home() {
   const renderForm = (row) => {
     return (
       <form onSubmit={(e) => handleSubmit(e, row)}>
-        <textarea
+        <input
           type="date"
           placeholder="Date"
           className="border rounded px-2 py-1"
@@ -149,77 +165,98 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="checkNo"
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 mt-2 ml-1"
           id="checkNo"
           name="checkNo"
           value={formData.checkNo}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <textarea
           type="text"
           placeholder="payee"
-          className="border rounded px-2 py-1 "
+          className="border rounded px-2 py-1 mt-2 ml-1 "
           id="payee"
           name="payee"
           value={formData.payee}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <textarea
           type="text"
           placeholder="memo"
-          className="border rounded px-2 py-1 "
+          className="border rounded px-2 py-1 mt-2 ml-1"
           id="memo"
           name="memo"
           value={formData.memo}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
 
         <textarea
           type="text"
           placeholder="category"
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 mt-2 ml-1 "
           id="category"
           name="category"
           value={formData.category}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <textarea
           type="text"
           placeholder="payment"
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 mt-2 ml-1 "
           id="payment"
           name="payment"
           value={formData.payment}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <textarea
           type="text"
           placeholder="deposit"
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 mt-2ml-1 "
           id="deposit"
           name="deposit"
           value={formData.deposit}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <textarea
           type="text"
           placeholder="amount"
-          className="border rounded px-2 py-1 "
+          className="border rounded px-2 py-1 mt-2 ml-1"
           id="amount"
           name="amount"
           value={formData.amount}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          rows={1}
           required
         />
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-32"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2  py-2 px-4 rounded focus:outline-none focus:shadow-outline w-25"
         >
           Submit
         </button>
@@ -233,6 +270,8 @@ export default function Home() {
       ...prevData,
       [name]: value,
     }));
+    // e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
   };
 
   const handleSubmit = async (e, row) => {
@@ -428,6 +467,7 @@ export default function Home() {
                         </>
                       )}
                     </tr>
+
                     {expandedRows.has(row._id) && (
                       <tr>
                         <td colSpan="8">{renderForm(row)}</td>
@@ -438,14 +478,6 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-        <button
-          className="border rounded bg-black text-white mt-4"
-          style={{ width: "150px", height: "62px" }}
-        >
-          <Link href="/pages/addForm" className="">
-            Add new bank
-          </Link>
-        </button>
       </div>
     </>
   );

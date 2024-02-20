@@ -11,8 +11,8 @@ const AddForm = () => {
     acNo: "",
     location: "",
     currency: "",
-    balance: "",
-    usdBalance: "",
+    balance: 0,
+    usdBalance: 0,
   });
 
   const handleChange = (e) => {

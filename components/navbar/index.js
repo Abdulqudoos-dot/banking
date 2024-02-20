@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function Navbar() {
@@ -30,6 +31,14 @@ export default function Navbar() {
           >
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
               <li className="nav-item">
+                <button
+                  className=" text-white mt-1"
+                  style={{ width: "150px", height: "62px" }}
+                >
+                  <Link href="/pages/addForm" className="">
+                    Add new bank
+                  </Link>
+                </button>
                 {/* <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="pages/register"
