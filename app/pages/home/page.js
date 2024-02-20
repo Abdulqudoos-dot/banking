@@ -27,6 +27,7 @@ export default function Home() {
     deposit: "",
     amount: "",
   });
+  const [bankDetail, setBankDetail] = useState([]);
 
   const handleEditChange = (field, value) => {
     setEditedData((prevData) => ({
@@ -55,12 +56,13 @@ export default function Home() {
     const fetchBankDetail = async () => {
       try {
         const response = await fetch(
-          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getAllBanks`
+          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
         );
         if (response.ok) {
           const apiData = await response.json();
-          setData(apiData.data);
-          setEditedData(apiData.data);
+          console.log(apiData);
+          setBankDetail(apiData.data);
+          // setEditedData(apiData.data);
         } else {
           console.error("Failed to fetch data:", response.statusText);
         }
@@ -70,6 +72,7 @@ export default function Home() {
     };
 
     fetchBankData();
+    fetchBankDetail();
   }, []);
 
   const handleEdit = async (rowId) => {
@@ -466,6 +469,32 @@ export default function Home() {
                           </td>
                         </>
                       )}
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-4 border-b">
+                        Date : {currentDate}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Check# : {row.acNo}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Payee : {row.location}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Memo : {row.currency}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Category : {row.balance}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Payment : {row.balance}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Deposit : {row.balance}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        Amount : {row.balance}
+                      </td>
                     </tr>
 
                     {expandedRows.has(row._id) && (

@@ -39,6 +39,14 @@ export default function Navbar() {
                     Add new bank
                   </Link>
                 </button>
+                <button
+                  className=" text-white mt-1"
+                  style={{ width: "150px", height: "62px" }}
+                >
+                  <Link href="/pages/addCurrency" className="">
+                    Add currency
+                  </Link>
+                </button>
                 {/* <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="pages/register"
