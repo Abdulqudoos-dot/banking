@@ -16,9 +16,9 @@ export default function Home() {
     usdBalance: "",
   });
   const [expandedRows, setExpandedRows] = useState(new Set());
-
+  const currentDate = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
-    date: "",
+    date: currentDate,
     checkNo: "",
     payee: "",
     memo: "",
@@ -136,17 +136,17 @@ export default function Home() {
   const renderForm = (row) => {
     return (
       <form onSubmit={(e) => handleSubmit(e, row)}>
-        <input
-          type="date"
-          placeholder="Date"
-          className="border rounded px-2 py-1"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={(e) => handleChange(e, row)}
-          required
-        />
-        <input
+   <textarea
+  type="date"
+  placeholder="Date"
+  className="border rounded px-2 py-1"
+  id="date"
+  name="date"
+  value={formData.date}
+  onChange={(e) => handleChange(e, row)}
+  required
+/>
+        <textarea
           type="text"
           placeholder="checkNo"
           className="border rounded px-2 py-1"
@@ -156,7 +156,7 @@ export default function Home() {
           onChange={handleChange}
           required
         />
-        <input
+        <textarea
           type="text"
           placeholder="payee"
           className="border rounded px-2 py-1 "
@@ -166,7 +166,7 @@ export default function Home() {
           onChange={handleChange}
           required
         />
-        <input
+        <textarea
           type="text"
           placeholder="memo"
           className="border rounded px-2 py-1 "
@@ -177,7 +177,7 @@ export default function Home() {
           required
         />
 
-        <input
+        <textarea
           type="text"
           placeholder="category"
           className="border rounded px-2 py-1"
@@ -187,7 +187,7 @@ export default function Home() {
           onChange={handleChange}
           required
         />
-        <input
+        <textarea
           type="text"
           placeholder="payment"
           className="border rounded px-2 py-1"
@@ -197,7 +197,7 @@ export default function Home() {
           onChange={handleChange}
           required
         />
-        <input
+        <textarea
           type="text"
           placeholder="deposit"
           className="border rounded px-2 py-1"
@@ -207,7 +207,7 @@ export default function Home() {
           onChange={handleChange}
           required
         />
-        <input
+        <textarea
           type="text"
           placeholder="amount"
           className="border rounded px-2 py-1 "
@@ -232,6 +232,7 @@ export default function Home() {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+      
     }));
   };
 
