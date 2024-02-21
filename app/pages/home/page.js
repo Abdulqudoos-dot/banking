@@ -476,7 +476,7 @@ export default function Home() {
                       toggleRow &&
                       bankDetail.map((item, index) => {
                         return (
-                          <tr>
+                          <tr key={index}>
                             <td className="py-2 px-4 border-b">
                               Date : {item.date}
                             </td>
