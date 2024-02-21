@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@/components/navbar";
 import url from "@/utils/url";
+// import url from "@/utils/url";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -52,26 +53,26 @@ export default function Home() {
         console.error("Error during data fetch:", error);
       }
     };
-    const fetchBankDetail = async () => {
-      try {
-        const response = await fetch(
-          `${url}/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
-        );
-        if (response.ok) {
-          const apiData = await response.json();
-          console.log(apiData);
-          setBankDetail(apiData.data);
-          // setEditedData(apiData.data);
-        } else {
-          console.error("Failed to fetch data:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error during data fetch:", error);
-      }
-    };
+    // const fetchBankDetail = async () => {
+    //   try {
+    //     const response = await fetch(
+    //       `${url}/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
+    //     );
+    //     if (response.ok) {
+    //       const apiData = await response.json();
+    //       console.log(apiData);
+    //       setBankDetail(apiData.data);
+    //       // setEditedData(apiData.data);
+    //     } else {
+    //       console.error("Failed to fetch data:", response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error during data fetch:", error);
+    //   }
+    // };
 
     fetchBankData();
-    fetchBankDetail();
+    // fetchBankDetail();
   }, []);
 
   const handleEdit = async (rowId) => {
@@ -147,11 +148,19 @@ export default function Home() {
 
   const renderForm = (row) => {
     return (
-      <form onSubmit={(e) => handleSubmit(e, row)}>
+      <form
+        onSubmit={(e) => handleSubmit(e, row)}
+        style={{
+          // margin: "12px",
+          display: "flex",
+          alignItems: "center",
+          // width: "1800px",
+        }}
+      >
         <input
           type="date"
           placeholder="Date"
-          className="border rounded px-2 py-1"
+          className="border w-30 rounded px-1 py-1"
           id="date"
           name="date"
           value={formData.date}
@@ -161,7 +170,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="checkNo"
-          className="border rounded px-2 py-1 mt-2 ml-1"
+          className="border w-[170px] rounded px-2 py-1  ml-1"
           id="checkNo"
           name="checkNo"
           value={formData.checkNo}
@@ -174,7 +183,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="payee"
-          className="border rounded px-2 py-1 mt-2 ml-1 "
+          className="border w-[170px] rounded px-2 py-1  ml-1 "
           id="payee"
           name="payee"
           value={formData.payee}
@@ -187,7 +196,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="memo"
-          className="border rounded px-2 py-1 mt-2 ml-1"
+          className="border w-[170px] rounded px-2 py-1 ml-1"
           id="memo"
           name="memo"
           value={formData.memo}
@@ -201,7 +210,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="category"
-          className="border rounded px-2 py-1 mt-2 ml-1 "
+          className="border w-[170px] rounded px-2 py-1  ml-1 "
           id="category"
           name="category"
           value={formData.category}
@@ -214,7 +223,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="payment"
-          className="border rounded px-2 py-1 mt-2 ml-1 "
+          className="border w-[170px] rounded px-2 py-1 ml-1 "
           id="payment"
           name="payment"
           value={formData.payment}
@@ -227,7 +236,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="deposit"
-          className="border rounded px-2 py-1 mt-2ml-1 "
+          className="border w-[170px] rounded px-2 py-1 ml-1 "
           id="deposit"
           name="deposit"
           value={formData.deposit}
@@ -240,7 +249,7 @@ export default function Home() {
         <textarea
           type="text"
           placeholder="amount"
-          className="border rounded px-2 py-1 mt-2 ml-1"
+          className="border w-[170px] rounded px-2 py-1  ml-1"
           id="amount"
           name="amount"
           value={formData.amount}
@@ -252,7 +261,8 @@ export default function Home() {
         />
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2  py-2 px-4 rounded focus:outline-none focus:shadow-outline w-25"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2  rounded focus:outline-none focus:shadow-outline w-25"
+          style={{ height: "37px", width: "90px" }}
         >
           Submit
         </button>
@@ -272,12 +282,6 @@ export default function Home() {
 
   const handleSubmit = async (e, row) => {
     e.preventDefault();
-    console.log(row);
-    // const submitData = {
-    //   ...row,
-    //   formData: formData,
-    // };
-
     try {
       const response = await fetch(`${url}/api/v1/bank/addDetails/${row._id}`, {
         method: "POST",
@@ -313,10 +317,10 @@ export default function Home() {
         rel="stylesheet"
       />
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container w-full p-4">
         <h1 className="text-2xl font-bold mb-4">Banking Dashboard</h1>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
+        <div className="">
+          <table className="w-full bg-white border border-gray-300">
             <thead>
               <tr>
                 <th className="py-2 px-4 border-b text-left">Add Details</th>
