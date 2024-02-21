@@ -302,6 +302,14 @@ export default function Home() {
           deposit: "",
           amount: "",
         });
+        const response2 = await fetch(
+          `${url}/api/v1/bank/getDetails/${row._id}`
+        );
+        if (response2.ok) {
+          const apiData = await response2.json();
+          console.log(apiData.data);
+          setBankDetail(apiData.data);
+        }
       } else {
         console.error("Failed to submit form:", response.statusText);
       }
@@ -464,33 +472,38 @@ export default function Home() {
                         </>
                       )}
                     </tr>
-                    <tr>
-                      <td className="py-2 px-4 border-b">
-                        Date : {currentDate}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Check# : {row.acNo}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Payee : {row.location}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Memo : {row.currency}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Category : {row.balance}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Payment : {row.balance}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Deposit : {row.balance}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        Amount : {row.balance}
-                      </td>
-                    </tr>
-
+                    {bankDetail &&
+                      toggleRow &&
+                      bankDetail.map((item, index) => {
+                        return (
+                          <tr>
+                            <td className="py-2 px-4 border-b">
+                              Date : {item.date}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Check# : {item.checkNo}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Payee : {item.payee}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Memo : {item.memo}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Category : {item.category}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Payment : {item.payment}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Deposit : {item.deposit}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              Amount : {item.amount}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     {expandedRows.has(row._id) && (
                       <tr>
                         <td colSpan="8">{renderForm(row)}</td>
