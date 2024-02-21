@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import url from "@/utils/url";
 
 const AddForm = () => {
   const router = useRouter();
@@ -36,10 +37,7 @@ const AddForm = () => {
 
     // Use Axios to send data (you may need to adjust the URL and method based on your server)
     try {
-      const response = await axios.post(
-        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addBank",
-        formData
-      );
+      const response = await axios.post(`${url}/api/v1/bank/addBank`, formData);
       router.push("/pages/home");
     } catch (error) {
       console.error("Error submitting form:", error);

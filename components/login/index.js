@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import url from "@/utils/url";
 
 const Login = () => {
   const router = useRouter();
@@ -47,10 +48,7 @@ const Login = () => {
     // If input is valid, make API request using Axios
     try {
       // Replace 'your_login_api_endpoint' with your actual login API endpoint
-      const response = await axios.post(
-        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/auth/login",
-        formData
-      );
+      const response = await axios.post(`${url}/api/v1/auth/login`, formData);
 
       // Handle successful response
       console.log(response.data);

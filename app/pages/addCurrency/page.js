@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import url from "@/utils/url";
 
 const CurrencyForm = () => {
   const [showForm, setShowForm] = useState(false); // State for form visibility
@@ -30,7 +31,7 @@ const CurrencyForm = () => {
       // If editing, update the existing entry
       try {
         const response = await axios.put(
-          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/currency/currencies/${entries[editingIndex]._id}`,
+          `${url}/api/v1/currency/currencies/${entries[editingIndex]._id}`,
           currencyInfo
         );
         if (response.status === 200) {
@@ -48,7 +49,7 @@ const CurrencyForm = () => {
       // If not editing, add a new entry
       try {
         const response = await axios.post(
-          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/currency/currencies",
+          `${url}/api/v1/currency/currencies`,
           currencyInfo
         );
         if (response.status === 201) {
@@ -79,9 +80,7 @@ const CurrencyForm = () => {
     // Fetch initial currency data
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://fine-teal-zebra-kilt.cyclic.app/api/v1/currency/currencies"
-        );
+        const response = await axios.get(`${url}/api/v1/currency/currencies`);
         if (response.status === 200) {
           setEntries(response.data);
         } else {
@@ -107,7 +106,7 @@ const CurrencyForm = () => {
     // Remove the selected entry
     try {
       const response = await axios.delete(
-        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/currency/currencies/${entries[index]._id}`
+        `${url}/api/v1/currency/currencies/${entries[index]._id}`
       );
       if (response.status === 200) {
         const updatedEntries = [...entries];
@@ -193,7 +192,7 @@ const CurrencyForm = () => {
         </button>
 
         {showForm && (
-          <div className="container mx-auto mt-8">
+          <div className="container px-20 mt-8">
             <h2 className="text-2xl font-semibold mb-4">
               Currency Information
             </h2>

@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "@/components/navbar";
+import url from "@/utils/url";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -39,9 +40,7 @@ export default function Home() {
   useEffect(() => {
     const fetchBankData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/v1/bank/getAllBanks"
-        );
+        const response = await fetch(`${url}/api/v1/bank/getAllBanks`);
         if (response.ok) {
           const apiData = await response.json();
           setData(apiData.data);
@@ -56,7 +55,7 @@ export default function Home() {
     const fetchBankDetail = async () => {
       try {
         const response = await fetch(
-          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
+          `${url}/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
         );
         if (response.ok) {
           const apiData = await response.json();
@@ -83,16 +82,13 @@ export default function Home() {
       setIsEditing(true);
     } else {
       try {
-        const response = await fetch(
-          `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${rowId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editedData),
-          }
-        );
+        const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedData),
+        });
         if (response.ok) {
           setEditingRowIndex(null);
           setIsEditing(false);
@@ -118,15 +114,12 @@ export default function Home() {
 
   const handleDelete = async (rowId) => {
     try {
-      const response = await fetch(
-        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/${rowId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (response.ok) {
         const updatedData = [...data];
         updatedData.splice(rowId, 1);
@@ -286,16 +279,13 @@ export default function Home() {
     // };
 
     try {
-      const response = await fetch(
-        `https://fine-teal-zebra-kilt.cyclic.app/api/v1/bank/addDetails/${row._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${url}/api/v1/bank/addDetails/${row._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         console.log("Form submitted successfully");

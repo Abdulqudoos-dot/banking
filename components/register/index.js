@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import url from "@/utils/url";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -49,7 +50,7 @@ const Register = () => {
     try {
       // Make API request using Axios
       const response = await axios.post(
-        "https://fine-teal-zebra-kilt.cyclic.app/api/v1/auth/register",
+        `${url}/api/v1/auth/register`,
         formData
       );
 
