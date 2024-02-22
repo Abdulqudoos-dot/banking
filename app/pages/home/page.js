@@ -1,6 +1,5 @@
 "use client";
 import Navbar from "@/components/navbar";
-import url from "@/utils/url";
 // import url from "@/utils/url";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -41,7 +40,9 @@ export default function Home() {
   useEffect(() => {
     const fetchBankData = async () => {
       try {
-        const response = await fetch(`${url}/api/v1/bank/getAllBanks`);
+        const response = await fetch(
+          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getAllBanks`
+        );
         if (response.ok) {
           const apiData = await response.json();
           setData(apiData.data);
@@ -83,13 +84,16 @@ export default function Home() {
       setIsEditing(true);
     } else {
       try {
-        const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editedData),
-        });
+        const response = await fetch(
+          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${rowId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editedData),
+          }
+        );
         if (response.ok) {
           setEditingRowIndex(null);
           setIsEditing(false);
@@ -115,12 +119,15 @@ export default function Home() {
 
   const handleDelete = async (rowId) => {
     try {
-      const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${rowId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.ok) {
         const updatedData = [...data];
         updatedData.splice(rowId, 1);
@@ -134,12 +141,23 @@ export default function Home() {
     }
   };
 
-  const toggleRow = (rowId) => {
+  const toggleRow = async (rowId) => {
     setExpandedRows((prevExpandedRows) => {
       const newExpandedRows = new Set(prevExpandedRows);
       if (newExpandedRows.has(rowId)) {
         newExpandedRows.delete(rowId);
+        setBankDetail([]);
       } else {
+        (async () => {
+          const response2 = await fetch(
+            `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getDetails/${rowId}`
+          );
+          if (response2.ok) {
+            const apiData = await response2.json();
+            console.log(apiData.data);
+            setBankDetail(apiData.data);
+          }
+        })();
         newExpandedRows.add(rowId);
       }
       return newExpandedRows;
@@ -282,18 +300,37 @@ export default function Home() {
 
   const handleSubmit = async (e, row) => {
     e.preventDefault();
+
     try {
-      const response = await fetch(`${url}/api/v1/bank/addDetails/${row._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/addDetails/${row._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         console.log("Form submitted successfully");
+
+        // Calculate new balance
+        const newBalance =
+          parseFloat(row.balance) + parseFloat(formData.amount);
+
+        // Update the balance in the editedData
+        const updatedRow = { ...row, balance: newBalance.toString() };
+
+        // Update the data state with the updated row
+        setData((prevData) =>
+          prevData.map((item) => (item._id === row._id ? updatedRow : item))
+        );
+
+        // Clear the form data
         setFormData({
+          date: currentDate,
           checkNo: "",
           payee: "",
           memo: "",
@@ -302,9 +339,12 @@ export default function Home() {
           deposit: "",
           amount: "",
         });
+
+        // Fetch updated bank details
         const response2 = await fetch(
-          `${url}/api/v1/bank/getDetails/${row._id}`
+          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getDetails/${row._id}`
         );
+
         if (response2.ok) {
           const apiData = await response2.json();
           console.log(apiData.data);
@@ -476,32 +516,37 @@ export default function Home() {
                       toggleRow &&
                       bankDetail.map((item, index) => {
                         return (
-                          <tr key={index}>
-                            <td className="py-2 px-4 border-b">
-                              Date : {item.date}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Check# : {item.checkNo}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Payee : {item.payee}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Memo : {item.memo}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Category : {item.category}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Payment : {item.payment}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Deposit : {item.deposit}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              Amount : {item.amount}
-                            </td>
-                          </tr>
+                          <React.Fragment key={index}>
+                            {item.bankId === row._id && (
+                              <tr>
+                                <td className="py-2 px-4 border-b">
+                                  Date :
+                                  {new Date(item.date).toLocaleDateString()}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Check# : {item.checkNo}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Payee : {item.payee}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Memo : {item.memo}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Category : {item.category}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Payment : {item.payment}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Deposit : {item.deposit}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  Amount : {item.amount}
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
                         );
                       })}
                     {expandedRows.has(row._id) && (
