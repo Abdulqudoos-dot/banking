@@ -183,7 +183,6 @@ export default function Home() {
           name="date"
           value={formData.date}
           onChange={(e) => handleChange(e, row)}
-          required
         />
         <textarea
           type="text"
@@ -196,7 +195,6 @@ export default function Home() {
             handleChange(e);
           }}
           rows={1}
-          required
         />
         <textarea
           type="text"
@@ -209,7 +207,6 @@ export default function Home() {
             handleChange(e);
           }}
           rows={1}
-          required
         />
         <textarea
           type="text"
@@ -222,7 +219,6 @@ export default function Home() {
             handleChange(e);
           }}
           rows={1}
-          required
         />
 
         <textarea
@@ -236,7 +232,6 @@ export default function Home() {
             handleChange(e);
           }}
           rows={1}
-          required
         />
         <textarea
           type="text"
@@ -246,10 +241,9 @@ export default function Home() {
           name="payment"
           value={formData.payment}
           onChange={(e) => {
-            handleChange(e);
+            handlePaymentChange(e);
           }}
           rows={1}
-          required
         />
         <textarea
           type="text"
@@ -259,10 +253,9 @@ export default function Home() {
           name="deposit"
           value={formData.deposit}
           onChange={(e) => {
-            handleChange(e);
+            handleDepositChange(e);
           }}
           rows={1}
-          required
         />
         <textarea
           type="text"
@@ -275,7 +268,6 @@ export default function Home() {
             handleChange(e);
           }}
           rows={1}
-          required
         />
         <button
           type="submit"
@@ -297,11 +289,64 @@ export default function Home() {
     // e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
   };
+  const handlePaymentChange = (e) => {
+    const paymentValue = e.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      payment: paymentValue,
+      amount: paymentValue, // Set amount to payment value
+    }));
+    e.target.style.height = e.target.scrollHeight + "px";
+  };
+
+  const handleDepositChange = (e) => {
+    const depositValue = e.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      deposit: depositValue,
+      amount: depositValue, // Set amount to deposit value
+    }));
+    e.target.style.height = e.target.scrollHeight + "px";
+  };
 
   const handleSubmit = async (e, row) => {
     e.preventDefault();
 
+    // Parse balance to a float
+    let newBalance = parseFloat(row.balance);
+
+    // Check if payment is a valid number and balance is greater than 0
+    if (!isNaN(parseFloat(formData.payment)) && newBalance > 0) {
+      newBalance -= parseFloat(formData.payment);
+    }
+
+    // Check if deposit is a valid number
+    if (!isNaN(parseFloat(formData.deposit))) {
+      newBalance += parseFloat(formData.deposit);
+    }
+
+    console.log(newBalance);
+
+    // Update the row with the new balance
+    const updatedRow = { ...row, balance: newBalance.toString() };
+    setData((prevData) =>
+      prevData.map((item) => (item._id === row._id ? updatedRow : item))
+    );
+
+    // Update balance on the server
+    await fetch(
+      `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${row._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ balance: newBalance }),
+      }
+    );
+
     try {
+      // Submit form data
       const response = await fetch(
         `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/addDetails/${row._id}`,
         {
@@ -315,18 +360,6 @@ export default function Home() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-
-        // Calculate new balance
-        const newBalance =
-          parseFloat(row.balance) + parseFloat(formData.amount);
-
-        // Update the balance in the editedData
-        const updatedRow = { ...row, balance: newBalance.toString() };
-
-        // Update the data state with the updated row
-        setData((prevData) =>
-          prevData.map((item) => (item._id === row._id ? updatedRow : item))
-        );
 
         // Clear the form data
         setFormData({
