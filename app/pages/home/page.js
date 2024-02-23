@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "@/components/navbar";
-// import url from "@/utils/url";
+import url from "@/utils/url";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -40,9 +40,7 @@ export default function Home() {
   useEffect(() => {
     const fetchBankData = async () => {
       try {
-        const response = await fetch(
-          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getAllBanks`
-        );
+        const response = await fetch(`${url}/api/v1/bank/getAllBanks`);
         if (response.ok) {
           const apiData = await response.json();
           setData(apiData.data);
@@ -54,26 +52,8 @@ export default function Home() {
         console.error("Error during data fetch:", error);
       }
     };
-    // const fetchBankDetail = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       `${url}/api/v1/bank/getDetails/65d2e57d6184e00462b11769`
-    //     );
-    //     if (response.ok) {
-    //       const apiData = await response.json();
-    //       console.log(apiData);
-    //       setBankDetail(apiData.data);
-    //       // setEditedData(apiData.data);
-    //     } else {
-    //       console.error("Failed to fetch data:", response.statusText);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error during data fetch:", error);
-    //   }
-    // };
 
     fetchBankData();
-    // fetchBankDetail();
   }, []);
 
   const handleEdit = async (rowId) => {
@@ -84,30 +64,29 @@ export default function Home() {
       setIsEditing(true);
     } else {
       try {
-        const response = await fetch(
-          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${rowId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editedData),
-          }
-        );
+        const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedData),
+        });
         if (response.ok) {
+          const updatedData = await response.json();
+          console.log(updatedData);
           setEditingRowIndex(null);
           setIsEditing(false);
-          console.log(await response.json());
           setData((prevData) => {
             const newData = prevData.map((item) => {
               if (item._id === rowId) {
-                return editedData;
+                console.log({ ...updatedData.data });
+                return { ...item, ...updatedData.data };
               }
               return item;
             });
             return newData;
           });
-          console.log("Data updated successfully:", editedData);
+          console.log("Data updated successfully:", updatedData);
         } else {
           console.error("Failed to update data:", response.statusText);
         }
@@ -119,20 +98,16 @@ export default function Home() {
 
   const handleDelete = async (rowId) => {
     try {
-      const response = await fetch(
-        `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${rowId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${url}/api/v1/bank/${rowId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (response.ok) {
         const updatedData = [...data];
         updatedData.splice(rowId, 1);
         setData(updatedData);
-        console.log("Data deleted successfully");
       } else {
         console.error("Failed to delete data:", response.statusText);
       }
@@ -150,7 +125,7 @@ export default function Home() {
       } else {
         (async () => {
           const response2 = await fetch(
-            `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getDetails/${rowId}`
+            `${url}/api/v1/bank/getDetails/${rowId}`
           );
           if (response2.ok) {
             const apiData = await response2.json();
@@ -291,20 +266,22 @@ export default function Home() {
   };
   const handlePaymentChange = (e) => {
     const paymentValue = e.target.value;
+    const numericValue = paymentValue.replace(/[^0-9.]/g, "");
     setFormData((prevData) => ({
       ...prevData,
-      payment: paymentValue,
-      amount: paymentValue, // Set amount to payment value
+      payment: numericValue,
+      amount: numericValue, // Set amount to payment value
     }));
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
   const handleDepositChange = (e) => {
     const depositValue = e.target.value;
+    const numericValue = depositValue.replace(/[^0-9.]/g, "");
     setFormData((prevData) => ({
       ...prevData,
-      deposit: depositValue,
-      amount: depositValue, // Set amount to deposit value
+      deposit: numericValue,
+      amount: numericValue,
     }));
     e.target.style.height = e.target.scrollHeight + "px";
   };
@@ -334,29 +311,23 @@ export default function Home() {
     );
 
     // Update balance on the server
-    await fetch(
-      `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/${row._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ balance: newBalance }),
-      }
-    );
+    await fetch(`${url}/api/v1/bank/${row._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ balance: newBalance }),
+    });
 
     try {
       // Submit form data
-      const response = await fetch(
-        `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/addDetails/${row._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${url}/api/v1/bank/addDetails/${row._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         console.log("Form submitted successfully");
@@ -375,7 +346,7 @@ export default function Home() {
 
         // Fetch updated bank details
         const response2 = await fetch(
-          `https://banking-back-end-576fa7a10145.herokuapp.com/api/v1/bank/getDetails/${row._id}`
+          `${url}/api/v1/bank/getDetails/${row._id}`
         );
 
         if (response2.ok) {

@@ -139,23 +139,21 @@ const CurrencyForm = () => {
         <table className=" bg-white border border-gray-300">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b font-medium">currencyName</th>
-              <th className="py-2 px-4 border-b font-medium">currencySymbol</th>
-              <th className="py-2 px-4 border-b font-medium">currencyCode</th>
-              <th className="py-2 px-4 border-b font-medium">exchangeRate</th>
+              <th className="py-2 px-4 border-b font-medium">Currency Name</th>
               <th className="py-2 px-4 border-b font-medium">
-                exchangeRatecurrencyFormat
+                Currency Symbol
               </th>
-              <th className="py-2 px-4 border-b font-medium">currencyFormat</th>
+              <th className="py-2 px-4 border-b font-medium">Currency Code</th>
+              <th className="py-2 px-4 border-b font-medium">Exchange Rate</th>
+              <th className="py-2 px-4 border-b font-medium">
+                Currency Format
+              </th>
               <th className="py-2 px-4 border-b font-medium">actions</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry, index) => (
               <tr key={index}>
-                <td className="py-2 px-4 border-b font-medium">
-                  Currency {index + 1}
-                </td>
                 <td className="py-2 px-4 border-b">{entry.currencyName}</td>
                 <td className="py-2 px-4 border-b">{entry.currencySymbol}</td>
                 <td className="py-2 px-4 border-b">{entry.currencyCode}</td>

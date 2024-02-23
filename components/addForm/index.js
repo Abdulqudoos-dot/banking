@@ -28,16 +28,16 @@ const AddForm = () => {
     e.preventDefault();
 
     // Simple validation
-    for (const key in formData) {
-      if (!formData[key]) {
-        alert(`Please fill in the ${key} field`);
-        return;
-      }
-    }
+    // for (const key in formData) {
+    //   if (!formData[key]) {
+    //     alert(`Please fill in the ${key} field`);
+    //     return;
+    //   }
+    // }
 
     // Use Axios to send data (you may need to adjust the URL and method based on your server)
     try {
-      const response = await axios.post(`${url}/api/v1/bank/addBank`, formData);
+      await axios.post(`${url}/api/v1/bank/addBank`, formData);
       router.push("/pages/home");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -154,7 +154,6 @@ const AddForm = () => {
             name="usdBalance"
             value={formData.usdBalance}
             onChange={handleChange}
-            required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           <br />
