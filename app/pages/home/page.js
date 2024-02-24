@@ -1,7 +1,6 @@
 "use client";
 import Navbar from "@/components/navbar";
 import url from "@/utils/url";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 export default function Home() {
@@ -40,7 +39,13 @@ export default function Home() {
   useEffect(() => {
     const fetchBankData = async () => {
       try {
-        const response = await fetch(`${url}/api/v1/bank/getAllBanks`);
+        const response = await fetch(`${url}/api/v1/bank/getAllBanks`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        });
         if (response.ok) {
           const apiData = await response.json();
           setData(apiData.data);
@@ -68,6 +73,7 @@ export default function Home() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
           },
           body: JSON.stringify(editedData),
         });
@@ -102,6 +108,7 @@ export default function Home() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
         },
       });
       if (response.ok) {
@@ -125,7 +132,14 @@ export default function Home() {
       } else {
         (async () => {
           const response2 = await fetch(
-            `${url}/api/v1/bank/getDetails/${rowId}`
+            `${url}/api/v1/bank/getDetails/${rowId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+            }
           );
           if (response2.ok) {
             const apiData = await response2.json();
@@ -315,6 +329,7 @@ export default function Home() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ balance: newBalance }),
     });
@@ -325,6 +340,7 @@ export default function Home() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
         },
         body: JSON.stringify(formData),
       });
@@ -343,12 +359,16 @@ export default function Home() {
           deposit: "",
           amount: "",
         });
-
-        // Fetch updated bank details
         const response2 = await fetch(
-          `${url}/api/v1/bank/getDetails/${row._id}`
+          `${url}/api/v1/bank/getDetails/${row._id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": localStorage.getItem("token"),
+            },
+          }
         );
-
         if (response2.ok) {
           const apiData = await response2.json();
           console.log(apiData.data);

@@ -9,16 +9,22 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
+    isAdmin: true,
   });
-
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-
+    if (e.target.type === "checkbox") {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.checked,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
     setErrors({
       ...errors,
       [e.target.name]: "", // Clear previous error when input changes
@@ -48,22 +54,16 @@ const Register = () => {
     }
 
     try {
-      // Make API request using Axios
+      console.log(formData);
       const response = await axios.post(
         `${url}/api/v1/auth/register`,
         formData
       );
-
-      // Handle successful response
-      console.log(response.data);
-
-      // Assuming your API returns a success message, you can show an alert to the user
+      console.log(formData);
       alert("User added successfully");
-
-      // Redirect to the login page
       window.location.href = "/";
     } catch (error) {
-      console.error("Error registering user:", error.message);
+      console.error("Error registering user:", error);
       // Handle error response
       // Show an error message or take appropriate action
     }
@@ -131,9 +131,19 @@ const Register = () => {
               }`}
               required
             />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-            )}
+            <div className="flex items-center mt-4">
+              <input
+                type="checkbox"
+                id="isAdmin"
+                checked={formData.isAdmin}
+                name="isAdmin"
+                onChange={handleChange}
+                className="mr-2 border rounded text-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              />
+              <label htmlFor="admin" className="text-sm text-gray-700">
+                Admin
+              </label>
+            </div>
           </div>
           <button
             type="submit"

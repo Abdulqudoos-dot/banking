@@ -37,7 +37,11 @@ const AddForm = () => {
 
     // Use Axios to send data (you may need to adjust the URL and method based on your server)
     try {
-      await axios.post(`${url}/api/v1/bank/addBank`, formData);
+      const headers = {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      };
+      await axios.post(`${url}/api/v1/bank/addBank`, formData, { headers });
       router.push("/pages/home");
     } catch (error) {
       console.error("Error submitting form:", error);

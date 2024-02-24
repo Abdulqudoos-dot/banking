@@ -44,21 +44,20 @@ const Login = () => {
       setErrors(validationErrors);
       return;
     }
-
     // If input is valid, make API request using Axios
     try {
       // Replace 'your_login_api_endpoint' with your actual login API endpoint
       const response = await axios.post(`${url}/api/v1/auth/login`, formData);
-
-      // Handle successful response
-      console.log(response.data);
-
-      // Assuming your API returns a success message, you can show an alert to the user
-      router.push("pages/home");
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      if (user.isAdmin) {
+        router.push("/pages/admin");
+      } else {
+        router.push("/pages/home");
+      }
     } catch (error) {
       console.error("Error logging in:", error.message);
 
-      // Handle error response
       if (error.response && error.response.status === 401) {
         // Unauthorized (incorrect email or password)
         alert("Incorrect email or password. Please try again.");

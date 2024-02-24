@@ -30,9 +30,14 @@ const CurrencyForm = () => {
     if (editingIndex !== null) {
       // If editing, update the existing entry
       try {
+        const headers = {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        };
         const response = await axios.put(
           `${url}/api/v1/currency/currencies/${entries[editingIndex]._id}`,
-          currencyInfo
+          currencyInfo,
+          { headers }
         );
         if (response.status === 200) {
           const updatedEntries = [...entries];
@@ -48,9 +53,14 @@ const CurrencyForm = () => {
     } else {
       // If not editing, add a new entry
       try {
+        const headers = {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        };
         const response = await axios.post(
           `${url}/api/v1/currency/currencies`,
-          currencyInfo
+          currencyInfo,
+          { headers }
         );
         if (response.status === 201) {
           const newEntry = response.data;
@@ -80,7 +90,14 @@ const CurrencyForm = () => {
     // Fetch initial currency data
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${url}/api/v1/currency/currencies`);
+        const headers = {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        };
+
+        const response = await axios.get(`${url}/api/v1/currency/currencies`, {
+          headers,
+        });
         if (response.status === 200) {
           setEntries(response.data);
         } else {
@@ -95,18 +112,20 @@ const CurrencyForm = () => {
   }, []); // Empty dependency array to run once on component mount
 
   const handleEdit = (index) => {
-    // Set the form fields to the values of the selected entry
     setCurrencyInfo(entries[index]);
     setEditingIndex(index);
-    // Open the form for editing
     setShowForm(true);
   };
 
   const handleDelete = async (index) => {
-    // Remove the selected entry
     try {
+      const headers = {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      };
       const response = await axios.delete(
-        `${url}/api/v1/currency/currencies/${entries[index]._id}`
+        `${url}/api/v1/currency/currencies/${entries[index]._id}`,
+        { headers }
       );
       if (response.status === 200) {
         const updatedEntries = [...entries];
