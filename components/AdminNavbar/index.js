@@ -1,9 +1,15 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const logoutHandle = () => {
+    localStorage.clear();
+    router.push("/");
+  };
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-blue-500 mb-3">
@@ -63,6 +69,13 @@ export default function Navbar() {
                   <Link href="/pages/allUsers" className="">
                     Show User
                   </Link>
+                </button>
+                <button
+                  className=" text-white mt-1"
+                  style={{ width: "150px", height: "62px" }}
+                  onClick={logoutHandle}
+                >
+                  Logout
                 </button>
                 {/* <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
