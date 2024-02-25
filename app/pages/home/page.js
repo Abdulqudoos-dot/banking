@@ -28,6 +28,7 @@ export default function Home() {
     amount: "",
   });
   const [bankDetail, setBankDetail] = useState([]);
+  let [ok, setOk] = useState(1);
 
   const handleEditChange = (field, value) => {
     setEditedData((prevData) => ({
@@ -59,7 +60,7 @@ export default function Home() {
     };
 
     fetchBankData();
-  }, []);
+  }, [ok]);
 
   const handleEdit = async (rowId) => {
     if (!isEditing) {
@@ -316,23 +317,33 @@ export default function Home() {
       newBalance += parseFloat(formData.deposit);
     }
 
-    console.log(newBalance);
-
-    // Update the row with the new balance
     const updatedRow = { ...row, balance: newBalance.toString() };
     setData((prevData) =>
       prevData.map((item) => (item._id === row._id ? updatedRow : item))
     );
-
+    const bankResponse = await fetch(`${url}/api/v1/bank/getBank/${row._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    const data = await bankResponse.json();
     // Update balance on the server
-    await fetch(`${url}/api/v1/bank/${row._id}`, {
+    const response = await fetch(`${url}/api/v1/bank/${row._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
-      body: JSON.stringify({ balance: newBalance }),
+      body: JSON.stringify({
+        balance: newBalance,
+        currency: data.data.currency,
+      }),
     });
+    if (response.ok) {
+      setOk((ok += 1));
+    }
 
     try {
       // Submit form data
@@ -347,8 +358,6 @@ export default function Home() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-
-        // Clear the form data
         setFormData({
           date: currentDate,
           checkNo: "",

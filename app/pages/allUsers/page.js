@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import url from "@/utils/url";
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -9,10 +10,14 @@ const AdminPage = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      const headers = {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      };
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/auth/users"
-        );
+        const response = await axios.get(`${url}/api/v1/auth/users`, {
+          headers,
+        });
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user records:", error);
@@ -34,10 +39,7 @@ const AdminPage = () => {
 
   const handleSaveEdit = async (userId) => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/v1/auth/users/${userId}`,
-        editedUserData
-      );
+      await axios.put(`${url}/api/v1/auth/users/${userId}`, editedUserData);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === userId ? { ...user, ...editedUserData } : user
@@ -52,7 +54,7 @@ const AdminPage = () => {
 
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/auth/users/${userId}`);
+      await axios.delete(`${url}/api/v1/auth/users/${userId}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
       alert("User deleted successfully");
     } catch (error) {

@@ -46,7 +46,6 @@ const Login = () => {
     }
     // If input is valid, make API request using Axios
     try {
-      // Replace 'your_login_api_endpoint' with your actual login API endpoint
       const response = await axios.post(`${url}/api/v1/auth/login`, formData);
       const { token, user } = response.data;
       localStorage.setItem("token", token);
