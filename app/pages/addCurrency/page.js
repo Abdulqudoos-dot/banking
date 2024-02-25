@@ -26,7 +26,6 @@ const CurrencyForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (editingIndex !== null) {
       // If editing, update the existing entry
       try {
