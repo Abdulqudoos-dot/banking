@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import url from "@/utils/url";
-import LoginNavbar from "../loginScreenNavbar";
 
 const Register = () => {
   const [formData, setFormData] = useState({

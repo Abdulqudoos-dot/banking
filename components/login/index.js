@@ -4,7 +4,6 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import url from "@/utils/url";
-import LoginNavbar from "../loginScreenNavbar";
 
 const Login = () => {
   const router = useRouter();
