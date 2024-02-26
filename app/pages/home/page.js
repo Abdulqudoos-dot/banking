@@ -133,7 +133,7 @@ export default function Home() {
       } else {
         (async () => {
           const response2 = await fetch(
-            `${url}/api/v1/bank/getDetails/${rowId}`,
+            ` ${url}/api/v1/bank/getDetails/${rowId}`,
             {
               method: "GET",
               headers: {
@@ -159,12 +159,12 @@ export default function Home() {
       <form
         onSubmit={(e) => handleSubmit(e, row)}
         style={{
-          // margin: "12px",
           display: "flex",
-          alignItems: "center",
-          // width: "1800px",
+          overflowX: "auto", // Add this style for horizontal scrollbar
+          whiteSpace: "nowrap", // Prevent text wrapping to next line
         }}
       >
+        {/* Your form fields */}
         <input
           type="date"
           placeholder="Date"
@@ -261,7 +261,7 @@ export default function Home() {
         />
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2  rounded focus:outline-none focus:shadow-outline w-25"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2 rounded focus:outline-none focus:shadow-outline"
           style={{ height: "37px", width: "90px" }}
         >
           Submit
@@ -593,6 +593,7 @@ export default function Home() {
           </table>
         </div>
       </div>
+          
     </>
   );
 }

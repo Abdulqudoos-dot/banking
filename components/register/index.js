@@ -3,28 +3,22 @@ import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import url from "@/utils/url";
+import LoginNavbar from "../loginScreenNavbar";
 
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    isAdmin: true,
   });
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    if (e.target.type === "checkbox") {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.checked,
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
     setErrors({
       ...errors,
       [e.target.name]: "", // Clear previous error when input changes
@@ -75,6 +69,7 @@ const Register = () => {
         href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
         rel="stylesheet"
       />
+      {/* <LoginNavbar /> */}
       <div className="container mx-auto p-4 flex flex-col items-center justify-center h-screen">
         <h1 className="text-3xl font-bold mb-8">Register</h1>
         <form className="w-full max-w-md space-y-4" onSubmit={handleSubmit}>
@@ -131,19 +126,6 @@ const Register = () => {
               }`}
               required
             />
-            <div className="flex items-center mt-4">
-              <input
-                type="checkbox"
-                id="isAdmin"
-                checked={formData.isAdmin}
-                name="isAdmin"
-                onChange={handleChange}
-                className="mr-2 border rounded text-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              />
-              <label htmlFor="admin" className="text-sm text-gray-700">
-                Admin
-              </label>
-            </div>
           </div>
           <button
             type="submit"

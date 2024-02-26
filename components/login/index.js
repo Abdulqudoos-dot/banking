@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import url from "@/utils/url";
+import LoginNavbar from "../loginScreenNavbar";
 
 const Login = () => {
   const router = useRouter();
@@ -73,7 +74,8 @@ const Login = () => {
         href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
         rel="stylesheet"
       />
-      <div className="container mx-auto p-4 flex flex-col items-center justify-center h-screen">
+      {/* <LoginNavbar /> */}
+      <div className="container mx-auto p-4 flex flex-col items-center justify-center  h-screen">
         <h1 className="text-3xl font-bold mb-8">Login</h1>
         <form className="w-full max-w-md space-y-4" onSubmit={handleSubmit}>
           <div className="flex flex-col">
