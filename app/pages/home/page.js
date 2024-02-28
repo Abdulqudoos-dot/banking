@@ -128,9 +128,6 @@ export default function Home() {
 
   const toggleRow = async (rowId) => {
     setToggleSet(rowId);
-
-    console.log(rowId);
-    console.log(toggleSet);
     setExpandedRows((prevExpandedRows) => {
       const newExpandedRows = new Set(prevExpandedRows);
       if (newExpandedRows.has(rowId)) {
@@ -624,7 +621,7 @@ export default function Home() {
                         <td className="py-2 px-2 border-b border-r">
                           {row.usdBalance}
                         </td>
-                        <td className="py-2 px-2 border-b border-r ">
+                        <td className="py-2 px-2 border-b border-r text-center ">
                           <button
                             onClick={() => handleEdit(row._id)}
                             className=" text-green-500 hover:text-green-700 mr-2"
@@ -632,7 +629,7 @@ export default function Home() {
                             <FaEdit className="text-2xl" />
                           </button>
                         </td>
-                        <td className="py-2 px-2 border-b border-r ">
+                        <td className="py-2 px-2 border-b border-r text-center">
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="text-red-500 hover:text-red-700"
