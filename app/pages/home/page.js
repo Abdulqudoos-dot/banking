@@ -2,10 +2,12 @@
 import Navbar from "@/components/navbar";
 import url from "@/utils/url";
 import React, { useState, useEffect } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [editingRowIndex, setEditingRowIndex] = useState(null);
+  const [toggleSet, setToggleSet] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({
     bankName: "",
@@ -29,6 +31,7 @@ export default function Home() {
   });
   const [bankDetail, setBankDetail] = useState([]);
   let [ok, setOk] = useState(1);
+  const [openDetail, setOpenDetail] = useState(false);
 
   const handleEditChange = (field, value) => {
     setEditedData((prevData) => ({
@@ -80,7 +83,6 @@ export default function Home() {
         });
         if (response.ok) {
           const updatedData = await response.json();
-          console.log(updatedData);
           setEditingRowIndex(null);
           setIsEditing(false);
           setData((prevData) => {
@@ -125,15 +127,26 @@ export default function Home() {
   };
 
   const toggleRow = async (rowId) => {
+    setToggleSet(rowId);
+
+    console.log(rowId);
+    console.log(toggleSet);
     setExpandedRows((prevExpandedRows) => {
       const newExpandedRows = new Set(prevExpandedRows);
       if (newExpandedRows.has(rowId)) {
+        // if (toggleSet === rowId) {
+        setOpenDetail(false);
+        // }
+
         newExpandedRows.delete(rowId);
         setBankDetail([]);
       } else {
+        // if (toggleSet === rowId) {
+        setOpenDetail(true);
+        // }
         (async () => {
           const response2 = await fetch(
-            ` ${url}/api/v1/bank/getDetails/${rowId}`,
+            `${url}/api/v1/bank/getDetails/${rowId}`,
             {
               method: "GET",
               headers: {
@@ -160,112 +173,147 @@ export default function Home() {
         onSubmit={(e) => handleSubmit(e, row)}
         style={{
           display: "flex",
-          overflowX: "auto", // Add this style for horizontal scrollbar
-          whiteSpace: "nowrap", // Prevent text wrapping to next line
+          overflowX: "auto",
+          whiteSpace: "nowrap",
         }}
       >
-        {/* Your form fields */}
-        <input
-          type="date"
-          placeholder="Date"
-          className="border w-30 rounded px-1 py-1"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={(e) => handleChange(e, row)}
-        />
-        <textarea
-          type="text"
-          placeholder="checkNo"
-          className="border w-[170px] rounded px-2 py-1  ml-1"
-          id="checkNo"
-          name="checkNo"
-          value={formData.checkNo}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          rows={1}
-        />
-        <textarea
-          type="text"
-          placeholder="payee"
-          className="border w-[170px] rounded px-2 py-1  ml-1 "
-          id="payee"
-          name="payee"
-          value={formData.payee}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          rows={1}
-        />
-        <textarea
-          type="text"
-          placeholder="memo"
-          className="border w-[170px] rounded px-2 py-1 ml-1"
-          id="memo"
-          name="memo"
-          value={formData.memo}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          rows={1}
-        />
+        <table className="w-full bg-white border border-collapse border-gray-300">
+          <thead>
+            <tr>
+              {[
+                "DATE",
+                "CHECK",
+                "PAYEE",
+                "MEMO",
+                "CATEGORY",
+                "PAYMENT",
+                "DEPOSIT",
+                "ENTRY",
+              ].map((header, index) => (
+                <th
+                  key={index}
+                  className="py-2 px-2 border-b border-r text-left header-cell"
+                  style={{
+                    backgroundColor: "#C5D1F7",
+                    color: "black",
+                  }}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input
+                  type="date"
+                  placeholder="Date"
+                  className="border w-30 rounded px-1 py-1 ml-1 my-3"
+                  id="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={(e) => handleChange(e, row)}
+                />
+              </td>
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="checkNo"
+                  className="border w-[140px] rounded px-2 py-1  ml-1  my-3"
+                  id="checkNo"
+                  name="checkNo"
+                  value={formData.checkNo}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="payee"
+                  className="border w-[140px] rounded px-2 py-1  ml-1 my-3 "
+                  id="payee"
+                  name="payee"
+                  value={formData.payee}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="memo"
+                  className="border w-[140px] rounded px-2 py-1 ml-1 my-3"
+                  id="memo"
+                  name="memo"
+                  value={formData.memo}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="category"
+                  className="border w-[140px] rounded px-2 py-1  ml-1 my-3 "
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
 
-        <textarea
-          type="text"
-          placeholder="category"
-          className="border w-[170px] rounded px-2 py-1  ml-1 "
-          id="category"
-          name="category"
-          value={formData.category}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          rows={1}
-        />
-        <textarea
-          type="text"
-          placeholder="payment"
-          className="border w-[170px] rounded px-2 py-1 ml-1 "
-          id="payment"
-          name="payment"
-          value={formData.payment}
-          onChange={(e) => {
-            handlePaymentChange(e);
-          }}
-          rows={1}
-        />
-        <textarea
-          type="text"
-          placeholder="deposit"
-          className="border w-[170px] rounded px-2 py-1 ml-1 "
-          id="deposit"
-          name="deposit"
-          value={formData.deposit}
-          onChange={(e) => {
-            handleDepositChange(e);
-          }}
-          rows={1}
-        />
-        <textarea
-          type="text"
-          placeholder="amount"
-          className="border w-[170px] rounded px-2 py-1  ml-1"
-          id="amount"
-          name="amount"
-          value={formData.amount}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          rows={1}
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2 rounded focus:outline-none focus:shadow-outline"
-          style={{ height: "37px", width: "90px" }}
-        >
-          Submit
-        </button>
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="payment"
+                  className="border w-[140px] rounded px-2 py-1 ml-1 my-3 "
+                  id="payment"
+                  name="payment"
+                  value={formData.payment}
+                  onChange={(e) => {
+                    handlePaymentChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
+
+              <td>
+                <textarea
+                  type="text"
+                  placeholder="deposit"
+                  className="border w-[140px] rounded px-2 py-1 ml-1 my-3 "
+                  id="deposit"
+                  name="deposit"
+                  value={formData.deposit}
+                  onChange={(e) => {
+                    handleDepositChange(e);
+                  }}
+                  rows={1}
+                />
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2 rounded focus:outline-none focus:shadow-outline"
+                  style={{ height: "37px", width: "90px" }}
+                >
+                  Submit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </form>
     );
   };
@@ -398,202 +446,364 @@ export default function Home() {
         rel="stylesheet"
       />
       <Navbar />
-      <div className="container w-full p-4">
+      <div className="flex flex-col justify-center  p-4">
         <h1 className="text-2xl font-bold mb-4">Banking Dashboard</h1>
-        <div className="">
-          <table className="w-full bg-white border border-gray-300">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b text-left">Add Details</th>
-                <th className="py-2 px-4 border-b text-left">Bank Name</th>
-                <th className="py-2 px-4 border-b text-left">Account Number</th>
-                <th className="py-2 px-4 border-b text-left">Location</th>
-                <th className="py-2 px-4 border-b text-left">Currency</th>
-                <th className="py-2 px-4 border-b text-left">Balance</th>
-                <th className="py-2 px-4 border-b text-left">
-                  US$ Equivalent Balance
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(data) &&
-                data.map((row, index) => (
-                  <React.Fragment key={index}>
-                    <tr
-                      key={index}
-                      className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-                    >
-                      {editingRowIndex === row._id ? (
-                        <>
-                          <td
-                            className="py-2 px-4 border-b "
-                            style={{
-                              fontSize: "xx-large",
-                              paddingLeft: "40px",
-                            }}
+        <table className="w-full bg-white border border-collapse border-gray-300">
+          <thead>
+            <tr>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Add Details
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Bank Name
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Account Number
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Location
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Currency
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Balance
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Balance in USD
+              </th>
+              <th
+                className="py-2 px-2 border-b text-left border-r"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Edit
+              </th>
+              <th
+                className="py-2 px-2 border-b text-left border-r"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Delete
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(data) &&
+              data.map((row, index) => (
+                <React.Fragment key={index}>
+                  <tr className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                    {editingRowIndex === row._id ? (
+                      <>
+                        <td
+                          className="py-2 px-2 border-b text-center text-green-500 text-3xl border-r"
+                          style={{ fontSize: "xx-large" }}
+                        >
+                          +
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.bankName}
+                            onChange={(e) =>
+                              handleEditChange("bankName", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.acNo}
+                            onChange={(e) =>
+                              handleEditChange("acNo", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.location}
+                            onChange={(e) =>
+                              handleEditChange("location", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.currency}
+                            onChange={(e) =>
+                              handleEditChange("currency", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.balance}
+                            onChange={(e) =>
+                              handleEditChange("balance", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <input
+                            type="text"
+                            value={editedData.usdBalance}
+                            onChange={(e) =>
+                              handleEditChange("usdBalance", e.target.value)
+                            }
+                            className="border rounded px-2 py-1 w-full"
+                          />
+                        </td>
+                        <td className="py-2 px-2 border-b border-r ">
+                          <button
+                            onClick={() => handleEdit(row._id)}
+                            className=" text-green-500 hover:text-green-700 mr-2"
                           >
-                            +
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.bankName}
-                              onChange={(e) =>
-                                handleEditChange("bankName", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.acNo}
-                              onChange={(e) =>
-                                handleEditChange("acNo", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.location}
-                              onChange={(e) =>
-                                handleEditChange("location", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.currency}
-                              onChange={(e) =>
-                                handleEditChange("currency", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.balance}
-                              onChange={(e) =>
-                                handleEditChange("balance", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b">
-                            <input
-                              type="text"
-                              value={editedData.usdBalance}
-                              onChange={(e) =>
-                                handleEditChange("usdBalance", e.target.value)
-                              }
-                              className="border rounded px-2 py-1 w-full"
-                            />
-                          </td>
-                          <td className="py-2 px-4 border-b flex gap-9">
-                            <button
-                              onClick={() => handleEdit(row._id)}
-                              className=" text-green-500 hover:text-green-700 mr-2"
-                            >
-                              Save
-                            </button>
-                            <button
-                              onClick={() => handleDelete(row._id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td
-                            className="py-2 px-4 border-b cursor-pointer "
-                            style={{ fontSize: "x-large", paddingLeft: "40px" }}
-                            onClick={() => toggleRow(row._id)}
+                            Save
+                          </button>
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          <button
+                            onClick={() => handleDelete(row._id)}
+                            className="text-red-500 hover:text-red-700"
                           >
-                            {expandedRows.has(row._id) ? "-" : "+"}
-                          </td>
-
-                          <td className="py-2 px-4 border-b">{row.bankName}</td>
-                          <td className="py-2 px-4 border-b">{row.acNo}</td>
-                          <td className="py-2 px-4 border-b">{row.location}</td>
-                          <td className="py-2 px-4 border-b">{row.currency}</td>
-                          <td className="py-2 px-4 border-b">{row.balance}</td>
-                          <td className="py-2 px-4 border-b">
-                            {row.usdBalance}
-                          </td>
-
-                          <td className="py-2 px-4 border-b flex gap-9">
-                            <button
-                              onClick={() => handleEdit(row._id)}
-                              className=" text-green-500 hover:text-green-700 mr-2"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDelete(row._id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                    {bankDetail &&
-                      toggleRow &&
-                      bankDetail.map((item, index) => {
-                        return (
-                          <React.Fragment key={index}>
-                            {item.bankId === row._id && (
-                              <tr>
-                                <td className="py-2 px-4 border-b">
-                                  Date :
-                                  {new Date(item.date).toLocaleDateString()}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Check# : {item.checkNo}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Payee : {item.payee}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Memo : {item.memo}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Category : {item.category}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Payment : {item.payment}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Deposit : {item.deposit}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Amount : {item.amount}
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        );
-                      })}
-                    {expandedRows.has(row._id) && (
+                            Delete
+                          </button>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td
+                          className="py-2 px-2 border-b text-center cursor-pointer text-3xl border-r text-green-500 "
+                          style={{ fontSize: "x-large" }}
+                          onClick={() => toggleRow(row._id)}
+                        >
+                          {expandedRows.has(row._id) ? "-" : "+"}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.bankName}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.acNo}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.location}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.currency}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.balance}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r">
+                          {row.usdBalance}
+                        </td>
+                        <td className="py-2 px-2 border-b border-r ">
+                          <button
+                            onClick={() => handleEdit(row._id)}
+                            className=" text-green-500 hover:text-green-700 mr-2"
+                          >
+                            <FaEdit className="text-2xl" />
+                          </button>
+                        </td>
+                        <td className="py-2 px-2 border-b border-r ">
+                          <button
+                            onClick={() => handleDelete(row._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash className="text-2xl" />
+                          </button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                  {Array.isArray(bankDetail) &&
+                    openDetail &&
+                    bankDetail &&
+                    expandedRows && (
                       <tr>
-                        <td colSpan="8">{renderForm(row)}</td>
+                        <td colSpan={9}>
+                          <table className="w-full bg-white border border-collapse border-gray-300">
+                            <thead>
+                              <tr>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  DATE
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  CHECK
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  PAYEE
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  MEMO
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  CATEGORY
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  PAYMENT
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  DEPOSIT
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  BAlANCE
+                                </th>
+                                <th
+                                  className="py-2 px-2 border-b text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  ENTRY
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {bankDetail.map((item, subIndex) => {
+                                return (
+                                  <React.Fragment key={subIndex}>
+                                    {item.bankId === row._id && (
+                                      <tr>
+                                        {/* ... (existing bank detail cells) */}
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {new Date(
+                                            item.date
+                                          ).toLocaleDateString()}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.checkNo}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.payee}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.memo}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.category}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.payment}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.deposit}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {row.balance}
+                                        </td>
+                                        <td className="py-2 px-2 border-b border-r flex justify-center items-center">
+                                          <button
+                                            onClick={() => handleEdit(row._id)}
+                                            className=" text-green-500 hover:text-green-700 mr-2"
+                                          >
+                                            <FaEdit className="text-1xl" />
+                                          </button>
+                                          <button
+                                            onClick={() =>
+                                              handleDelete(row._id)
+                                            }
+                                            className="text-red-500 hover:text-red-700"
+                                          >
+                                            <FaTrash className="text-1xl" />
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    )}
+                                  </React.Fragment>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </td>
                       </tr>
                     )}
-                  </React.Fragment>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                  {expandedRows.has(row._id) && (
+                    <tr>
+                      <td colSpan="9">{renderForm(row)}</td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+          </tbody>
+        </table>
       </div>
-          
     </>
   );
 }
