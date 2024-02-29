@@ -3,12 +3,15 @@ import Navbar from "@/components/navbar";
 import url from "@/utils/url";
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { IoSaveOutline } from "react-icons/io5";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [editingRowIndex, setEditingRowIndex] = useState(null);
+  const [editingDetailIndex, setEditingDetailIndex] = useState(null);
   const [toggleSet, setToggleSet] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingDetail, setIsEditingDetail] = useState(false);
   const [editedData, setEditedData] = useState({
     bankName: "",
     acNo: "",
@@ -17,8 +20,20 @@ export default function Home() {
     balance: "",
     usdBalance: "",
   });
-  const [expandedRows, setExpandedRows] = useState(new Set());
   const currentDate = new Date().toISOString().split("T")[0];
+
+  const [editedDetailData, setEditedDetailData] = useState({
+    date: currentDate,
+    checkNo: "",
+    payee: "",
+    memo: "",
+    category: "",
+    payment: "",
+    deposit: "",
+    balance: "",
+  });
+
+  const [expandedRows, setExpandedRows] = useState(new Set());
   const [formData, setFormData] = useState({
     date: currentDate,
     checkNo: "",
@@ -35,6 +50,13 @@ export default function Home() {
 
   const handleEditChange = (field, value) => {
     setEditedData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  const handleDetailEditChange = (field, value) => {
+    setEditedDetailData((prevData) => ({
       ...prevData,
       [field]: value,
     }));
@@ -150,6 +172,110 @@ export default function Home() {
     }
   };
 
+  const handleDetailEdit = async (detail, row) => {
+    if (!isEditingDetail) {
+      setEditingDetailIndex(detail._id);
+      const selectedData = bankDetail.find((item) => item._id === detail._id);
+      setEditedDetailData(selectedData);
+      setIsEditingDetail(true);
+    } else {
+      try {
+        const updateDetailresponse = await fetch(
+          `${url}/api/v1/bank/bankDetail/${detail._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": localStorage.getItem("token"),
+            },
+            body: JSON.stringify(editedDetailData),
+          }
+        );
+        if (updateDetailresponse.ok) {
+          const updatedData = await updateDetailresponse.json();
+          let newBalance = parseFloat(row.balance);
+
+          if (!isNaN(parseFloat(editedDetailData.payment)) && newBalance > 0) {
+            newBalance -= parseFloat(editedDetailData.payment);
+          }
+          // Check if deposit is a valid number
+          if (!isNaN(parseFloat(editedDetailData.deposit))) {
+            newBalance += parseFloat(editedDetailData.deposit);
+          }
+
+          const updatedRow = { ...row, balance: newBalance.toString() };
+          setData((prevData) =>
+            prevData.map((item) => (item._id === row._id ? updatedRow : item))
+          );
+          const bankResponse = await fetch(
+            `${url}/api/v1/bank/getBank/${row._id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+            }
+          );
+          const data = await bankResponse.json();
+          const bankUpdateResponse = await fetch(
+            `${url}/api/v1/bank/${row._id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                balance: newBalance,
+                currency: data.data.currency,
+              }),
+            }
+          );
+
+          if (bankUpdateResponse.ok) {
+            const updateBalanceOfTrans = await fetch(
+              `${url}/api/v1/bank/bankDetail/${detail._id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "auth-token": localStorage.getItem("token"),
+                },
+                body: JSON.stringify({ balance: newBalance }),
+              }
+            );
+
+            setOk((ok += 1));
+          }
+
+          setEditingDetailIndex(null);
+          setIsEditingDetail(false);
+          setBankDetail((prevData) => {
+            const newData = prevData.map((item) => {
+              if (item._id === detail._id) {
+                return { ...item, ...updatedData.data };
+              }
+              return item;
+            });
+            return newData;
+          });
+          const updatedDetail = { ...detail, balance: newBalance.toString() };
+          setBankDetail((prevData) =>
+            prevData.map((item) =>
+              item._id === detail._id ? updatedDetail : item
+            )
+          );
+          console.log("Data updated successfully:", updatedData);
+        } else {
+          // console.error("Failed to update data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during update:", error);
+      }
+    }
+  };
+
   const toggleRow = async (rowId) => {
     setToggleSet(rowId);
     setExpandedRows((prevExpandedRows) => {
@@ -178,7 +304,6 @@ export default function Home() {
           );
           if (response2.ok) {
             const apiData = await response2.json();
-            console.log(apiData.data);
             setBankDetail(apiData.data);
           }
         })();
@@ -187,7 +312,6 @@ export default function Home() {
       return newExpandedRows;
     });
   };
-
   const renderForm = (row) => {
     return (
       <form
@@ -338,7 +462,6 @@ export default function Home() {
       </form>
     );
   };
-
   const handleChange = (e, row) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -354,33 +477,25 @@ export default function Home() {
     setFormData((prevData) => ({
       ...prevData,
       payment: numericValue,
-      amount: numericValue, // Set amount to payment value
     }));
     e.target.style.height = e.target.scrollHeight + "px";
   };
-
   const handleDepositChange = (e) => {
     const depositValue = e.target.value;
     const numericValue = depositValue.replace(/[^0-9.]/g, "");
     setFormData((prevData) => ({
       ...prevData,
       deposit: numericValue,
-      amount: numericValue,
     }));
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
   const handleSubmit = async (e, row) => {
     e.preventDefault();
-
-    // Parse balance to a float
     let newBalance = parseFloat(row.balance);
-
-    // Check if payment is a valid number and balance is greater than 0
     if (!isNaN(parseFloat(formData.payment)) && newBalance > 0) {
       newBalance -= parseFloat(formData.payment);
     }
-
     // Check if deposit is a valid number
     if (!isNaN(parseFloat(formData.deposit))) {
       newBalance += parseFloat(formData.deposit);
@@ -761,51 +876,181 @@ export default function Home() {
                                   <React.Fragment key={subIndex}>
                                     {item.bankId === row._id && (
                                       <tr>
-                                        {/* ... (existing bank detail cells) */}
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {new Date(
-                                            item.date
-                                          ).toLocaleDateString()}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.checkNo}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.payee}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.memo}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.category}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.payment}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.deposit}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.balance}
-                                        </td>
-                                        <td className="py-2 px-2 border-b border-r flex justify-center items-center">
-                                          <button
-                                            onClick={() =>
-                                              handleDetailEdit(item._id)
-                                            }
-                                            className=" text-green-500 hover:text-green-700 mr-2"
-                                          >
-                                            <FaEdit className="text-1xl" />
-                                          </button>
-                                          <button
-                                            onClick={() =>
-                                              handleDetailDelete(item._id)
-                                            }
-                                            className="text-red-500 hover:text-red-700"
-                                          >
-                                            <FaTrash className="text-1xl" />
-                                          </button>
-                                        </td>
+                                        {editingDetailIndex === item._id ? (
+                                          <>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.date}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "date",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.checkNo}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "checkNo",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.payee}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "payee",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.memo}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "memo",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={
+                                                  editedDetailData.category
+                                                }
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "category",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.payment}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "payment",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.deposit}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "deposit",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              <input
+                                                type="text"
+                                                value={editedDetailData.balance}
+                                                onChange={(e) =>
+                                                  handleDetailEditChange(
+                                                    "balance",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="border rounded px-2 py-1 w-full"
+                                              />
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r flex justify-center items-center">
+                                              <button
+                                                onClick={() =>
+                                                  handleDetailEdit(item, row)
+                                                }
+                                                className=" text-green-500 hover:text-green-700 mr-2"
+                                              >
+                                                <IoSaveOutline className="text-1xl" />
+                                              </button>
+                                              <button
+                                                onClick={() =>
+                                                  handleDetailDelete(item._id)
+                                                }
+                                                className="text-red-500 hover:text-red-700"
+                                              >
+                                                <FaTrash className="text-1xl" />
+                                              </button>
+                                            </td>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {new Date(
+                                                item.date
+                                              ).toLocaleDateString()}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.checkNo}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.payee}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.memo}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.category}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.payment}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.deposit}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r">
+                                              {item.balance}
+                                            </td>
+                                            <td className="py-2 px-2 border-b border-r flex justify-center items-center">
+                                              <button
+                                                onClick={() =>
+                                                  handleDetailEdit(item, row)
+                                                }
+                                                className=" text-green-500 hover:text-green-700 mr-2"
+                                              >
+                                                <FaEdit className="text-1xl" />
+                                              </button>
+                                              <button
+                                                onClick={() =>
+                                                  handleDetailDelete(item._id)
+                                                }
+                                                className="text-red-500 hover:text-red-700"
+                                              >
+                                                <FaTrash className="text-1xl" />
+                                              </button>
+                                            </td>
+                                          </>
+                                        )}
                                       </tr>
                                     )}
                                   </React.Fragment>
