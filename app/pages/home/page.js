@@ -350,18 +350,18 @@ export default function Home() {
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td className="border-r">
                 <input
                   type="date"
                   placeholder="Date"
-                  className="border w-30 rounded px-1 py-1 ml-1 my-3"
+                  className="border w-30 rounded  px-1 py-1 ml-1 my-3"
                   id="date"
                   name="date"
                   value={formData.date}
                   onChange={(e) => handleChange(e, row)}
                 />
               </td>
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="checkNo"
@@ -375,7 +375,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="payee"
@@ -389,7 +389,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="memo"
@@ -403,7 +403,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="category"
@@ -418,7 +418,7 @@ export default function Home() {
                 />
               </td>
 
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="payment"
@@ -433,7 +433,7 @@ export default function Home() {
                 />
               </td>
 
-              <td>
+              <td className="border-r">
                 <textarea
                   type="text"
                   placeholder="deposit"
@@ -447,7 +447,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td>
+              <td className="border-r">
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2 rounded focus:outline-none focus:shadow-outline"
