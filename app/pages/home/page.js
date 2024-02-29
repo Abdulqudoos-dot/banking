@@ -339,7 +339,7 @@ export default function Home() {
                   key={index}
                   className="py-2 px-2 border-b border-r text-left header-cell"
                   style={{
-                    backgroundColor: "rgb(100 116 139)",
+                    backgroundColor: "#f1f4fd",
                     color: "black",
                   }}
                 >
