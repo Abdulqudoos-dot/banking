@@ -27,7 +27,7 @@ export default function Home() {
     category: "",
     payment: "",
     deposit: "",
-    amount: "",
+    balance: "",
   });
   const [bankDetail, setBankDetail] = useState([]);
   let [ok, setOk] = useState(1);
@@ -118,6 +118,30 @@ export default function Home() {
         const updatedData = [...data];
         updatedData.splice(rowId, 1);
         setData(updatedData);
+      } else {
+        console.error("Failed to delete data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
+  };
+
+  const handleDetailDelete = async (detailId) => {
+    try {
+      const response = await fetch(
+        `${url}/api/v1/bank/bankDetail/${detailId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+      if (response.ok) {
+        const updatedbankDetail = [...bankDetail];
+        updatedbankDetail.splice(detailId, 1);
+        setBankDetail(updatedbankDetail);
       } else {
         console.error("Failed to delete data:", response.statusText);
       }
@@ -398,7 +422,7 @@ export default function Home() {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, balance: newBalance }),
       });
 
       if (response.ok) {
@@ -411,7 +435,6 @@ export default function Home() {
           category: "",
           payment: "",
           deposit: "",
-          amount: "",
         });
         const response2 = await fetch(
           `${url}/api/v1/bank/getDetails/${row._id}`,
@@ -763,18 +786,20 @@ export default function Home() {
                                           {item.deposit}
                                         </td>
                                         <td className="py-2 px-2 border-b border-r">
-                                          {row.balance}
+                                          {item.balance}
                                         </td>
                                         <td className="py-2 px-2 border-b border-r flex justify-center items-center">
                                           <button
-                                            onClick={() => handleEdit(row._id)}
+                                            onClick={() =>
+                                              handleDetailEdit(item._id)
+                                            }
                                             className=" text-green-500 hover:text-green-700 mr-2"
                                           >
                                             <FaEdit className="text-1xl" />
                                           </button>
                                           <button
                                             onClick={() =>
-                                              handleDelete(row._id)
+                                              handleDetailDelete(item._id)
                                             }
                                             className="text-red-500 hover:text-red-700"
                                           >
