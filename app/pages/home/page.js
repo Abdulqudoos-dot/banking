@@ -350,7 +350,7 @@ export default function Home() {
           </thead>
           <tbody>
             <tr>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <input
                   type="date"
                   placeholder="Date"
@@ -361,7 +361,7 @@ export default function Home() {
                   onChange={(e) => handleChange(e, row)}
                 />
               </td>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="checkNo"
@@ -375,7 +375,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="payee"
@@ -389,7 +389,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="memo"
@@ -403,7 +403,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="category"
@@ -418,7 +418,7 @@ export default function Home() {
                 />
               </td>
 
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="payment"
@@ -433,7 +433,7 @@ export default function Home() {
                 />
               </td>
 
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <textarea
                   type="text"
                   placeholder="deposit"
@@ -447,7 +447,7 @@ export default function Home() {
                   rows={1}
                 />
               </td>
-              <td className="border-r">
+              <td className="border-r pl-5">
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-2 rounded focus:outline-none focus:shadow-outline"
