@@ -277,14 +277,14 @@ export default function Home() {
   };
 
   const toggleRow = async (rowId) => {
-    setToggleSet(rowId);
     setExpandedRows((prevExpandedRows) => {
+      const isRowExpanded = prevExpandedRows.has(rowId);
       const newExpandedRows = new Set(prevExpandedRows);
-      if (newExpandedRows.has(rowId)) {
+      // console.log(toggleSet);
+      if (isRowExpanded) {
         // if (toggleSet === rowId) {
         setOpenDetail(false);
         // }
-
         newExpandedRows.delete(rowId);
         setBankDetail([]);
       } else {
@@ -339,7 +339,7 @@ export default function Home() {
                   key={index}
                   className="py-2 px-2 border-b border-r text-left header-cell"
                   style={{
-                    backgroundColor: "#C5D1F7",
+                    backgroundColor: "rgb(100 116 139)",
                     color: "black",
                   }}
                 >
@@ -785,7 +785,11 @@ export default function Home() {
                       <tr>
                         <td colSpan={9}>
                           <table className="w-full bg-white border border-collapse border-gray-300">
-                            <thead>
+                            <thead
+                              className={
+                                expandedRows.has(row._id) ? "" : "hidden"
+                              }
+                            >
                               <tr>
                                 <th
                                   className="py-2 px-2 border-b border-r text-left"
