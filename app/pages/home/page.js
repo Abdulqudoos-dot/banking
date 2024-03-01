@@ -433,7 +433,7 @@ export default function Home() {
                 >
                   {categories &&
                     categories.map((category, index) => (
-                      <option key={index} value={category._id}>
+                      <option key={index} value={category.name}>
                         {category.name}
                       </option>
                     ))}
