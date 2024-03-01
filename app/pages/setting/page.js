@@ -42,6 +42,7 @@ const Page = () => {
 
   return (
     <>
+      <Navbar />
       <div className="flex ml-4 pl-4 gap-8">
         <button
           className={`mt-1 text-blue ${

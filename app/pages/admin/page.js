@@ -8,7 +8,8 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [expandedRows, setExpandedRows] = useState(new Set());
   const [bankDetail, setBankDetail] = useState([]);
-
+  const currentDate = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(currentDate);
   const [selectedUser, setSelectedUser] = useState("");
   const [userList, setUserList] = useState([]);
   const [userRecords, setUserRecords] = useState([]);
@@ -107,9 +108,13 @@ const Page = () => {
       <div className="flex">
         <div className="flex-grow">
           <h1 className="text-3xl m-5">Transaction</h1>
-          <div className="text-2xl m-5 flex items-center">
+          <div className="text-2xl m-5 flex justify-between">
             {/* <h1>Select User</h1> */}
-            <select value={selectedUser} onChange={handleUserChange}>
+            <select
+              className="border w-[240px] rounded px-2 py-1 ml-1 my-3"
+              value={selectedUser}
+              onChange={handleUserChange}
+            >
               <option value="">Select a user</option>
               {userList.map((user) => (
                 <option key={user._id} value={user._id}>
@@ -117,99 +122,218 @@ const Page = () => {
                 </option>
               ))}
             </select>
+            <input type="date" value={date} className="border rounded" />
           </div>
         </div>
-        <div className="m-5">
-          <h1>Date</h1>
-          <input type="date" />
-        </div>
       </div>
-      <div className="container w-full p-4">
+      <div className="flex flex-col justify-center  p-4">
         <h1 className="text-2xl font-bold mb-4">Banking Dashboard</h1>
-        <div className="">
-          <table className="w-full bg-white border border-gray-300">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b text-left">
-                  See Transactions
-                </th>
-                <th className="py-2 px-4 border-b text-left">Bank Name</th>
-                <th className="py-2 px-4 border-b text-left">Account Number</th>
-                <th className="py-2 px-4 border-b text-left">Location</th>
-                <th className="py-2 px-4 border-b text-left">Currency</th>
-                <th className="py-2 px-4 border-b text-left">Balance</th>
-                <th className="py-2 px-4 border-b text-left">
-                  US$ Equivalent Balance
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(data) &&
-                data.map((row, index) => (
-                  <React.Fragment key={index}>
-                    <tr
-                      key={index}
-                      className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
+        <table className="w-full bg-white border border-collapse border-gray-300">
+          <thead>
+            <tr>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Add Details
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Bank Name
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Account Number
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Location
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Currency
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Balance
+              </th>
+              <th
+                className="py-2 px-2 border-b border-r text-left"
+                style={{ backgroundColor: "#4069E5", color: "white" }}
+              >
+                Balance in USD
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(data) &&
+              data.map((row, index) => (
+                <React.Fragment key={index}>
+                  <tr className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                    <td
+                      className="py-2 px-2 border-b text-center cursor-pointer text-3xl border-r text-green-500 "
+                      style={{ fontSize: "x-large" }}
+                      onClick={() => toggleRow(row._id)}
                     >
-                      <>
-                        <td
-                          className="py-2 px-4 border-b cursor-pointer "
-                          style={{ fontSize: "x-large", paddingLeft: "40px" }}
-                          onClick={() => toggleRow(row._id)}
-                        >
-                          {expandedRows.has(row._id) ? "-" : "+"}
-                        </td>
-
-                        <td className="py-2 px-4 border-b">{row.bankName}</td>
-                        <td className="py-2 px-4 border-b">{row.acNo}</td>
-                        <td className="py-2 px-4 border-b">{row.location}</td>
-                        <td className="py-2 px-4 border-b">{row.currency}</td>
-                        <td className="py-2 px-4 border-b">{row.balance}</td>
-                        <td className="py-2 px-4 border-b">{row.usdBalance}</td>
-                      </>
+                      {expandedRows.has(row._id) ? "⌄" : "+"}
+                    </td>
+                    <td className="py-2 px-2 border-b border-r">
+                      {row.bankName}
+                    </td>
+                    <td className="py-2 px-2 border-b border-r">{row.acNo}</td>
+                    <td className="py-2 px-2 border-b border-r">
+                      {row.location}
+                    </td>
+                    <td className="py-2 px-2 border-b border-r">
+                      {row.currency}
+                    </td>
+                    <td className="py-2 px-2 border-b border-r">
+                      {row.balance}
+                    </td>
+                    <td className="py-2 px-2 border-b border-r">
+                      {row.usdBalance}
+                    </td>
+                  </tr>
+                  {Array.isArray(bankDetail) && bankDetail && expandedRows && (
+                    <tr>
+                      <td colSpan={9}>
+                        <table className="w-full bg-white border border-collapse border-gray-300">
+                          <thead
+                            className={
+                              expandedRows.has(row._id) ? "" : "hidden"
+                            }
+                          >
+                            <tr>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                DATE
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                CHECK
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                PAYEE
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                MEMO
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                CATEGORY
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                PAYMENT
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b border-r text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                DEPOSIT
+                              </th>
+                              <th
+                                className="py-2 px-2 border-b text-left"
+                                style={{
+                                  backgroundColor: "#C5D1F7",
+                                  color: "black",
+                                }}
+                              >
+                                BAlANCE
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {bankDetail.map((item, subIndex) => {
+                              return (
+                                <React.Fragment key={subIndex}>
+                                  {item.bankId === row._id && (
+                                    <tr>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {new Date(
+                                          item.date
+                                        ).toLocaleDateString()}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.checkNo}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.payee}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.memo}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.category}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.payment}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.deposit}
+                                      </td>
+                                      <td className="py-2 px-2 border-b border-r">
+                                        {item.balance}
+                                      </td>
+                                    </tr>
+                                  )}
+                                </React.Fragment>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </td>
                     </tr>
-                    {bankDetail &&
-                      toggleRow &&
-                      bankDetail.map((item, index) => {
-                        return (
-                          <React.Fragment key={index}>
-                            {item.bankId === row._id && (
-                              <tr>
-                                <td className="py-2 px-4 border-b">
-                                  Date :
-                                  {new Date(item.date).toLocaleDateString()}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Check# : {item.checkNo}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Payee : {item.payee}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Memo : {item.memo}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Category : {item.category}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Payment : {item.payment}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Deposit : {item.deposit}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  Amount : {item.amount}
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        );
-                      })}
-                  </React.Fragment>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                  )}
+                </React.Fragment>
+              ))}
+          </tbody>
+        </table>
       </div>
       ;
     </>
