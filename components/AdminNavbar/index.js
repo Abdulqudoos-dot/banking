@@ -97,13 +97,13 @@ export default function AdminNavbar() {
                   style={{ width: "150px", height: "62px" }}
                   onClick={handleClick2}
                 >
-                  <Link
-                    href="/pages/setting"
+                  {/* <Link
+                    // href="/pages/setting"
                     className="text-black text-2xl mt-1 flex items-center"
                   >
                     <IoSettings size={30} />
                     Setting
-                  </Link>
+                  </Link> */}
                 </button>
                 <button
                   className="text-red-500 text-2xl mt-1 flex items-center"
