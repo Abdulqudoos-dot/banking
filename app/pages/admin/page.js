@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import url from "@/utils/url";
-import Navbar from "@/components/navbar";
+import AdminNavbar from "@/components/AdminNavbar";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -103,7 +103,7 @@ const Page = () => {
 
   return (
     <>
-      <Navbar />
+      <AdminNavbar />
       <div className="flex">
         <div className="flex-grow">
           <h1 className="text-3xl m-5">Transaction</h1>
