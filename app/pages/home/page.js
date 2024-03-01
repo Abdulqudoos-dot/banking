@@ -92,10 +92,6 @@ export default function Home() {
       try {
         const response = await fetch(`${url}/api/v1/category`, {
           method: "GET",
-          // headers: {
-          //   "Content-Type": "application/json",
-          //   "auth-token": localStorage.getItem("token"),
-          // },
         });
         if (response.ok) {
           const categories = await response.json();
