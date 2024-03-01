@@ -404,18 +404,19 @@ export default function Home() {
                 />
               </td>
               <td className="border-r pl-5">
-                <textarea
-                  type="text"
-                  placeholder="category"
-                  className="border w-[140px] rounded px-2 py-1  ml-1 my-3 "
+                <select
+                  className="border w-[140px] rounded px-2 py-1 ml-1 my-3"
                   id="category"
                   name="category"
                   value={formData.category}
                   onChange={(e) => {
                     handleChange(e);
                   }}
-                  rows={1}
-                />
+                >
+                  <option value="category1">Category 1</option>
+                  <option value="category2">Category 2</option>
+                  {/* Add more options as needed */}
+                </select>
               </td>
 
               <td className="border-r pl-5">

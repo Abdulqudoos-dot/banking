@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import url from "@/utils/url";
+import Setting from "../setting/page"
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import Navbar from "@/components/navbar";
 
 const CurrencyForm = () => {
   const [showForm, setShowForm] = useState(false); // State for form visibility
@@ -152,21 +155,26 @@ const CurrencyForm = () => {
 
   return (
     <>
+   {/* <Navbar/> */}
+    <Setting/>
       <div className="mt-8" style={{ marginLeft: "56px" }}>
-        <h3 className="text-lg font-semibold mb-4">Entered Data</h3>
-        <table className=" bg-white border border-gray-300">
+        {/* <h3 className="text-lg font-semibold mb-4">Entered Data</h3> */}
+        <table className=" bg-white border border-gray-300 text-center w-3/4" style={{marginLeft: "100px"}}>
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b font-medium">Currency Name</th>
-              <th className="py-2 px-4 border-b font-medium">
+            <th className="py-2 px-4 border-b border-white font-medium" style={{ backgroundColor: "#4069E5FF", color: "white" }}>
+                Currency Name</th>
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>
                 Currency Symbol
               </th>
-              <th className="py-2 px-4 border-b font-medium">Currency Code</th>
-              <th className="py-2 px-4 border-b font-medium">Exchange Rate</th>
-              <th className="py-2 px-4 border-b font-medium">
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>Currency Code</th>
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>Exchange Rate</th>
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>
                 Currency Format
               </th>
-              <th className="py-2 px-4 border-b font-medium">actions</th>
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>Edit</th>
+              <th className="py-2 px-4 border-b font-medium"style={{ backgroundColor: "#4069E5FF", color: "white" }}>Delete</th>
+
             </tr>
           </thead>
           <tbody>
@@ -180,15 +188,18 @@ const CurrencyForm = () => {
                 <td className="py-2 px-4 border-b">
                   <button
                     onClick={() => handleEdit(index)}
-                    className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 mr-2"
+                    className="text-green-500 hover:text-green-700 mr-2"
                   >
-                    Edit
-                  </button>
+                   <FaEdit className="text-2xl" />
+
+                  </button></td>
+                  <td>
                   <button
                     onClick={() => handleDelete(index)}
-                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
-                  >
-                    Delete
+                    className="text-red-500 hover:text-red-700"
+                    style={{marginLeft: "15px"}}
+                    >
+                   <FaTrash className="text-2xl" />  
                   </button>
                 </td>
               </tr>
@@ -199,45 +210,53 @@ const CurrencyForm = () => {
 
       <div className="mt-8">
         {/* Button to toggle the form visibility */}
-        <button
+        {/* <button
           onClick={() => setShowForm(!showForm)}
           className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mr-2"
           style={{ marginLeft: "70px" }}
         >
           Add Another Currency
-        </button>
+        </button> */}
 
-        {showForm && (
+        {/* {showForm && ( */}
           <div className="container px-20 mt-8">
             <h2 className="text-2xl font-semibold mb-4">
               Currency Information
             </h2>
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="currencyName"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Currency Name:
-                </label>
-                <input
-                  type="text"
-                  id="currencyName"
-                  name="currencyName"
-                  value={currencyInfo.currencyName}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border rounded-md w-full"
-                  required
-                />
-              </div>
+            <div className="flex mb-4">
+  <label
+    htmlFor="currencyName"
+    className="text-bold "
+    style={{marginTop: "12px"}}
+    // className="block text-sm font-medium text-gray-600 w-1/4"
+  >
+    <b>
+    Currency Name:
+    </b>
+  </label>
+  <input
+    type="text"
+    id="currencyName"
+    name="currencyName"
+    value={currencyInfo.currencyName}
+    onChange={handleChange}
+    className="mt-1 p-2 border rounded-md w-full bg-gray-200"
+    required
+  />
+</div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="currencySymbol"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Currency Symbol:
+
+<div className="flex mb-4">
+  <label
+    htmlFor="currencyName"
+    className="text-bold "
+    style={{marginTop: "12px"}}
+    // className="block text-sm font-medium text-gray-600 w-1/4"
+  >
+    <b>
+                  Currency Symbol:</b>
                 </label>
                 <input
                   type="text"
@@ -245,17 +264,20 @@ const CurrencyForm = () => {
                   name="currencySymbol"
                   value={currencyInfo.currencySymbol}
                   onChange={handleChange}
-                  className="mt-1 p-2 border rounded-md w-full"
+                  className="mt-1 p-2 border rounded-md w-full bg-gray-200"
                   required
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="currencyCode"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Currency Code:
+              <div className="flex mb-4">
+  <label
+    htmlFor="currencyName"
+    className="text-bold "
+    style={{marginTop: "12px"}}
+    // className="block text-sm font-medium text-gray-600 w-1/4"
+  >
+    <b>
+                  Currency Code:</b>
                 </label>
                 <input
                   type="text"
@@ -263,17 +285,20 @@ const CurrencyForm = () => {
                   name="currencyCode"
                   value={currencyInfo.currencyCode}
                   onChange={handleChange}
-                  className="mt-1 p-2 border rounded-md w-full"
+                  className="mt-1 p-2 border rounded-md w-full bg-gray-200"
                   required
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="exchangeRate"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Exchange Rate:
+              <div className="flex mb-4">
+  <label
+    htmlFor="currencyName"
+    className="text-bold "
+    style={{marginTop: "12px"}}
+    // className="block text-sm font-medium text-gray-600 w-1/4"
+  >
+    <b>
+                  Exchange Rate:</b>
                 </label>
                 <input
                   type="number"
@@ -282,17 +307,20 @@ const CurrencyForm = () => {
                   value={currencyInfo.exchangeRate}
                   onChange={handleChange}
                   step="0.01"
-                  className="mt-1 p-2 border rounded-md w-full"
+                  className="mt-1 p-2 border rounded-md w-full bg-gray-200"
                   required
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="currencyFormat"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Currency Format:
+              <div className="flex mb-4">
+  <label
+    htmlFor="currencyName"
+    className="text-bold "
+    style={{marginTop: "12px"}}
+    // className="block text-sm font-medium text-gray-600 w-1/4"
+  >
+    <b>
+                  Currency Format:</b>
                 </label>
                 <input
                   type="text"
@@ -300,19 +328,27 @@ const CurrencyForm = () => {
                   name="currencyFormat"
                   value={currencyInfo.currencyFormat}
                   onChange={handleChange}
-                  className="mt-1 p-2 border rounded-md w-full"
+                  className="mt-1 p-2 border rounded-md w-full bg-gray-200"
                   required
                 />
               </div>
+              {/* <button
+                type="submit"
+                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+                style={{marginLeft: "224px",width:"200px",height:"40px"}}
+              >
+                Go back
+              </button> */}
               <button
                 type="submit"
                 className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+                style={{marginLeft: "224px",width:"200px",height:"40px"}}
               >
                 {editingIndex !== null ? "Update" : "Submit"}
               </button>
             </form>
           </div>
-        )}
+        {/* )} */}
       </div>
     </>
   );
