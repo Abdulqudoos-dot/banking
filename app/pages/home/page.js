@@ -431,6 +431,7 @@ export default function Home() {
                     handleChange(e);
                   }}
                 >
+                  <option value="">add category</option>
                   {categories &&
                     categories.map((category, index) => (
                       <option key={index} value={category.name}>

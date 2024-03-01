@@ -95,7 +95,6 @@ const Page = () => {
             </p>
           </Link>
         </button>
-
         <button
           className={`mt-1 text-blue ${
             buttonStates.isClicked2
