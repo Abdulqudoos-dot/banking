@@ -83,7 +83,6 @@ function Category() {
   return (
     <>
       <Setting />
-
       <div className="container mx-auto p-4">
         {/* <h1 className="text-3xl font-semibold mb-4">Category Management</h1> */}
 
@@ -187,8 +186,8 @@ function Category() {
         </div>
         <button
           onClick={addCategory}
-          className="bg-blue-500 text-white p-2 rounded"
-          style={{ width: "200px" }}
+          className="bg-blue-500 text-white p-2 rounded ml-[237px]"
+          style={{ width: "120px" }}
         >
           Add
         </button>

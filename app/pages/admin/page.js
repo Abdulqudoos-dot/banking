@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import url from "@/utils/url";
 import AdminNavbar from "@/components/AdminNavbar";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -24,7 +25,9 @@ const Page = () => {
         const response = await axios.get(`${url}/api/v1/auth/users`, {
           headers,
         });
-        setUserList(response.data);
+        console.log(response.data);
+        const nonAdminUsers = response.data.filter((user) => !user.isAdmin);
+        setUserList(nonAdminUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -122,12 +125,10 @@ const Page = () => {
                 </option>
               ))}
             </select>
-            <input type="date" value={date} className="border rounded" />
           </div>
         </div>
       </div>
       <div className="flex flex-col justify-center  p-4">
-        <h1 className="text-2xl font-bold mb-4">Banking Dashboard</h1>
         <table className="w-full bg-white border border-collapse border-gray-300">
           <thead>
             <tr>
@@ -135,7 +136,7 @@ const Page = () => {
                 className="py-2 px-2 border-b border-r text-left"
                 style={{ backgroundColor: "#4069E5", color: "white" }}
               >
-                Add Details
+                View Transactions
               </th>
               <th
                 className="py-2 px-2 border-b border-r text-left"
@@ -185,7 +186,11 @@ const Page = () => {
                       style={{ fontSize: "x-large" }}
                       onClick={() => toggleRow(row._id)}
                     >
-                      {expandedRows.has(row._id) ? "⌄" : "+"}
+                      {expandedRows.has(row._id) ? (
+                        <MdKeyboardArrowDown className=" m-auto" />
+                      ) : (
+                        "+"
+                      )}
                     </td>
                     <td className="py-2 px-2 border-b border-r">
                       {row.bankName}
