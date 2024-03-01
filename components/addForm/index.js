@@ -23,6 +23,7 @@ const AddForm = () => {
   const [editingRowIndex, setEditingRowIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [expandedRows, setExpandedRows] = useState(new Set());
+  let [ok, setOk] = useState(1);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,8 +54,22 @@ const AddForm = () => {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       };
-      await axios.post(`${url}/api/v1/bank/addBank`, formData, { headers });
-      router.push("/pages/home");
+      const addBankRes = await axios.post(
+        `${url}/api/v1/bank/addBank`,
+        formData,
+        { headers }
+      );
+      alert("Bank Added.");
+
+      setFormData({
+        bankName: "",
+        acNo: "",
+        location: "",
+        currency: "",
+        balance: 0,
+        usdBalance: 0,
+      });
+      setOk(ok + 1);
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Error submitting form. Please try again later.");
@@ -84,7 +99,7 @@ const AddForm = () => {
     };
 
     fetchBankData();
-  }, []); // Removed 'ok' dependency as it was undefined in your code
+  }, [ok]); // Removed 'ok' dependency as it was undefined in your code
 
   const handleDelete = async (rowId) => {
     try {
@@ -194,7 +209,7 @@ const AddForm = () => {
                   className="py-2 px-4 border-b text-left"
                   style={{ backgroundColor: "blue", color: "white" }}
                 >
-                  US$ Equivalent Balance
+                  Balance in USD
                 </th>
                 <th
                   className="py-2 px-4 border-b text-left"
@@ -349,23 +364,17 @@ const AddForm = () => {
       </div>
 
       {/* <br/><br/> */}
-      <div className="container px-20 mt-8">
-        <form
-          onSubmit={handleSubmit}
-          className="4"
-          // style=""
-        >
-          {" "}
+      <div className="container px-20 mt-8 ">
+        <form onSubmit={handleSubmit} className="flex flex-col w-[500px]  ">
           <h1 className="text-2xl font-semibold mb-4">
-            <b>Banking Dashboard</b>
+            <b>Add new bank</b>
           </h1>
           {/* <br/><br/> */}
           <div className="mb-4">
             <label
-              htmlFor="currencyName"
+              htmlFor="bankName"
               className="text-bold "
               style={{ marginTop: "12px" }}
-              // className="block text-sm font-medium text-gray-600 w-1/4"
             >
               <b>Bank Name:</b>
             </label>
@@ -381,7 +390,7 @@ const AddForm = () => {
           </div>
           <div className=" mb-4">
             <label
-              htmlFor="currencyName"
+              htmlFor="acNo"
               className="text-bold "
               style={{ marginTop: "12px" }}
               // className="block text-sm font-medium text-gray-600 w-1/4"
@@ -400,7 +409,7 @@ const AddForm = () => {
           </div>
           <div className=" mb-4">
             <label
-              htmlFor="currencyName"
+              htmlFor="location"
               className="text-bold "
               style={{ marginTop: "12px" }}
               // className="block text-sm font-medium text-gray-600 w-1/4"
@@ -409,9 +418,9 @@ const AddForm = () => {
             </label>
             <input
               type="text"
-              id="bankName"
-              name="bankName"
-              value={formData.bankName}
+              id="location"
+              name="location"
+              value={formData.location}
               onChange={handleChange}
               required
               className="mt-1 p-2 border rounded-md w-full bg-gray-200"
@@ -508,7 +517,7 @@ required
 <br /></div> */}
           <div className="mb-4">
             <label
-              htmlFor="currency"
+              htmlFor="balance"
               className="block text-gray-700 font-bold mb-2"
             >
               {" "}
@@ -527,11 +536,11 @@ required
           </div>
           <div className="mb-4">
             <label
-              htmlFor="currency"
+              htmlFor="usdBalance"
               className="block text-gray-700 font-bold mb-2"
             >
               {" "}
-              <b>US$ Equivalent Balance: </b>
+              <b>Balance in USD: </b>
             </label>
             <input
               type="number"

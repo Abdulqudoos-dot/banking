@@ -1,136 +1,130 @@
 "use client";
-// import React from 'react'
-// import Link from 'next/link';
-
-// const page = () => {
-//   return (
-//     <div className="flex item-center justify-center">
-//         <Link href="/"clasName="ml-4">
-//             Bank
-//         </Link>
-//         <Link href="/"clasName="ml-4">
-//             Currency
-//         </Link>
-//         <Link href="/"clasName="ml-4">
-//             Categories
-//         </Link>
-
-//     </div>
-//   )
-// }
-
-// export default page
-
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  FaBank,
-  FaMoneyBillWave,
-  FaUserPlus,
-  FaUsers,
-  FaFilter,
-} from "react-icons/fa";
-import { HiCurrencyEuro } from "react-icons/hi";
-import { CiBank } from "react-icons/ci";
-import { BsBank2 } from "react-icons/bs";
 import Navbar from "@/components/navbar";
+import React, { useState } from "react";
+import { FaFilter } from "react-icons/fa";
+import { BsBank2 } from "react-icons/bs";
+import { BiDollarCircle } from "react-icons/bi";
+
 const Page = () => {
-  const [isClicked, setIsClicked] = useState(false);
+  const [buttonStates, setButtonStates] = useState({
+    isClicked: false,
+    isClicked1: false,
+    isClicked2: false,
+  });
 
   const handleClick = () => {
-    setIsClicked(true);
+    setButtonStates({
+      ...buttonStates,
+      isClicked: true,
+      isClicked1: false,
+      isClicked2: false,
+    });
   };
+
+  const handleClick1 = () => {
+    setButtonStates({
+      ...buttonStates,
+      isClicked1: true,
+      isClicked: false,
+      isClicked2: false,
+    });
+  };
+
+  const handleClick2 = () => {
+    setButtonStates({
+      ...buttonStates,
+      isClicked2: true,
+      isClicked: false,
+      isClicked1: false,
+    });
+  };
+
   return (
-    <div>
+    <>
       <Navbar />
-      <nav className="p-4 flex justify-around items-center">
+      <div className="flex ml-4 pl-4 gap-8">
         <button
           className={`mt-1 text-blue ${
-            isClicked ? "text-blue-500 border-b border-blue-500" : ""
+            buttonStates.isClicked
+              ? "text-blue-500 border-b border-blue-500"
+              : ""
           } hover:text-blue-500 hover:border-b hover:border-blue-500`}
-          style={{ width: "150px", height: "62px" }}
           onClick={handleClick}
         >
           <Link
             href="/pages/addForm"
-            className="text-black text-2xl mt-1 flex "
+            className="text-gray-500 text-2xl mt-1 flex hover:text-blue-500 focus:outline-none"
           >
-            {/* <a > */}
-            <BsBank2 size={50} />
-            Add new bank
-            {/* </a> */}
+            <BsBank2 size={35} />
+            <p
+              style={{
+                marginLeft: "11px",
+                marginTop: "8px",
+                borderBottom: "2px solid transparent",
+              }}
+              className="hover:border-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
+            >
+              Bank
+            </p>
           </Link>
         </button>
 
         <button
           className={`mt-1 text-blue ${
-            isClicked ? "text-blue-500 border-b border-blue-500" : ""
+            buttonStates.isClicked1
+              ? "text-blue-500 border-b border-blue-500"
+              : ""
           } hover:text-blue-500 hover:border-b hover:border-blue-500`}
-          style={{ width: "150px", height: "62px" }}
-          onClick={handleClick}
+          onClick={handleClick1}
         >
           <Link
             href="/pages/addCurrency"
-            className="text-black text-2xl mt-1 flex "
+            className="text-gray-500 text-2xl mt-1 flex hover:text-blue-500 focus:outline-none"
           >
-            {/* <a > */}
-            <HiCurrencyEuro size={50} />
-            Add currency
-            {/* </a> */}
+            <BiDollarCircle size={35} />
+            <p
+              style={{
+                marginLeft: "11px",
+                marginTop: "3px",
+                borderBottom: "2px solid transparent",
+              }}
+              className="hover:border-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
+            >
+              Currency
+            </p>
           </Link>
         </button>
 
         <button
           className={`mt-1 text-blue ${
-            isClicked ? "text-blue-500 border-b border-blue-500" : ""
+            buttonStates.isClicked2
+              ? "text-blue-500 border-b border-blue-500"
+              : ""
           } hover:text-blue-500 hover:border-b hover:border-blue-500`}
-          style={{ width: "150px", height: "62px" }}
-          onClick={handleClick}
+          onClick={handleClick2}
         >
           <Link
             href="/pages/addCategory"
-            className="text-black text-2xl mt-1 flex"
+            className="text-gray-500 text-2xl mt-1 flex hover:text-blue-500 focus:outline-none"
           >
-            {/* <a > */}
-            <FaFilter size={50} />
-            Categories
-            {/* </a> */}
+            <FaFilter size={35} />
+            <p
+              style={{
+                marginLeft: "11px",
+                marginTop: "3px",
+                borderBottom: "2px solid transparent",
+              }}
+              className="hover:border-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
+            >
+              Categories
+            </p>
           </Link>
         </button>
-
-        {/* <button
-                  className={`mt-1 text-blue ${isClicked ? 'text-blue-500 border-b border-blue-500' : ''} hover:text-blue-500 hover:border-b hover:border-blue-500`}
-                  style={{ width: '150px', height: '62px' }}
-                  onClick={handleClick}
-                >
-        <Link href="/pages/home"className="text-gray-200 text-2xl mt-1 flex">
-          {/* <a > */}
-        {/* <FaUsers size={50} />
-            Users
-          {/* </a> */}
-        {/* </Link></button>  */}
-      </nav>
-
-      {/* Add this style in your global CSS or as a module */}
-      <style jsx>{`
-        .nav-link {
-          text-decoration: none;
-          color: black;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          cursor: pointer;
-          padding-bottom: 4px;
-          border-bottom: 2px solid transparent;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-          color: blue;
-          border-bottom-color: blue;
-        }
-      `}</style>
-    </div>
+      </div>
+      <br />
+      <br />
+    </>
   );
 };
 

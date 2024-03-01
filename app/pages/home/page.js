@@ -47,6 +47,7 @@ export default function Home() {
   const [bankDetail, setBankDetail] = useState([]);
   let [ok, setOk] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const handleEditChange = (field, value) => {
     setEditedData((prevData) => ({
@@ -86,7 +87,28 @@ export default function Home() {
 
     fetchBankData();
   }, [ok]);
-
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await fetch(`${url}/api/v1/category`, {
+          method: "GET",
+          // headers: {
+          //   "Content-Type": "application/json",
+          //   "auth-token": localStorage.getItem("token"),
+          // },
+        });
+        if (response.ok) {
+          const categories = await response.json();
+          setCategories(categories);
+        } else {
+          console.error("Failed to fetch data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during data fetch:", error);
+      }
+    };
+    fetchCategory();
+  }, []);
   const handleEdit = async (rowId) => {
     if (!isEditing) {
       setEditingRowIndex(rowId);
@@ -413,9 +435,12 @@ export default function Home() {
                     handleChange(e);
                   }}
                 >
-                  <option value="category1">Category 1</option>
-                  <option value="category2">Category 2</option>
-                  {/* Add more options as needed */}
+                  {categories &&
+                    categories.map((category, index) => (
+                      <option key={index} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
                 </select>
               </td>
 
@@ -989,12 +1014,12 @@ export default function Home() {
                                                 className="border rounded px-2 py-1 w-full"
                                               />
                                             </td>
-                                            <td className="py-2 px-2 border-b border-r flex justify-center items-center">
+                                            <td className="py-2 px-2 border-b border-r flex pb-5">
                                               <button
                                                 onClick={() =>
                                                   handleDetailEdit(item, row)
                                                 }
-                                                className=" text-green-500 hover:text-green-700 mr-2"
+                                                className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1 w-full"
                                               >
                                                 <IoSaveOutline className="text-1xl" />
                                               </button>
@@ -1036,12 +1061,12 @@ export default function Home() {
                                             <td className="py-2 px-2 border-b border-r">
                                               {item.balance}
                                             </td>
-                                            <td className="py-2 px-2 border-b border-r flex justify-center items-center">
+                                            <td className=" px-2 py-2 border-b border-r flex pb-5">
                                               <button
                                                 onClick={() =>
                                                   handleDetailEdit(item, row)
                                                 }
-                                                className=" text-green-500 hover:text-green-700 mr-2"
+                                                className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1"
                                               >
                                                 <FaEdit className="text-1xl" />
                                               </button>

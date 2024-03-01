@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import AdminNavbar from "../../../components/AdminNavbar";
 import url from "@/utils/url";
+import Navbar from "@/components/navbar";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -103,7 +103,7 @@ const Page = () => {
 
   return (
     <>
-      <AdminNavbar />
+      <Navbar />
       <div className="flex">
         <div className="flex-grow">
           <h1 className="text-3xl m-5">Transaction</h1>
