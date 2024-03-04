@@ -294,20 +294,18 @@ export default function Home() {
   };
 
   const toggleRow = async (rowId) => {
+    // toggleRow(rowId);
     setExpandedRows((prevExpandedRows) => {
       const isRowExpanded = prevExpandedRows.has(rowId);
       const newExpandedRows = new Set(prevExpandedRows);
       // console.log(toggleSet);
       if (isRowExpanded) {
-        // if (toggleSet === rowId) {
         setOpenDetail(false);
-        // }
         newExpandedRows.delete(rowId);
         setBankDetail([]);
+        // toggleRow();
       } else {
-        // if (toggleSet === rowId) {
         setOpenDetail(true);
-        // }
         (async () => {
           const response2 = await fetch(
             `${url}/api/v1/bank/getDetails/${rowId}`,

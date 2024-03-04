@@ -35,6 +35,7 @@ const Page = () => {
 
     fetchUsers();
   }, []);
+
   useEffect(() => {
     const fetchBankData = async () => {
       try {
@@ -61,18 +62,13 @@ const Page = () => {
   }, []);
 
   const handleUserChange = async (event) => {
+    event.preventDefault();
+
     const userId = event.target.value;
     setSelectedUser(userId);
-    console.log(selectedUser);
-    // try {
-    //   const response = await axios.get(
-    //     `${url}/api/v1/bank/getDetailsbyUser/${rowId}/${selectedUser._id}`
-    //   );
-    //   setBankDetail(response.data); // Assuming the data is inside a 'data' property
-    // } catch (error) {
-    //   console.error(`Error fetching records for ${userId}`, error);
-    //   setUserRecords([]); // Set to an empty array to clear any previous data
-    // }
+    setExpandedRows(new Set()); // Clear expanded rows when a new user is selected
+    setBankDetail([]);
+    // The rest of your code...
   };
 
   const toggleRow = async (rowId) => {
@@ -112,7 +108,6 @@ const Page = () => {
         <div className="flex-grow">
           <h1 className="text-3xl m-5">Transaction</h1>
           <div className="text-2xl m-5 flex justify-between">
-            {/* <h1>Select User</h1> */}
             <select
               className="border w-[240px] rounded px-2 py-1 ml-1 my-3"
               value={selectedUser}
@@ -128,7 +123,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center  p-4">
+      <div className="flex flex-col justify-center p-4">
         <table className="w-full bg-white border border-collapse border-gray-300">
           <thead>
             <tr>
