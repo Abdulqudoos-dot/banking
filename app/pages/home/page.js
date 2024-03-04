@@ -9,7 +9,6 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [editingRowIndex, setEditingRowIndex] = useState(null);
   const [editingDetailIndex, setEditingDetailIndex] = useState(null);
-  const [toggleSet, setToggleSet] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingDetail, setIsEditingDetail] = useState(false);
   const [editedData, setEditedData] = useState({
@@ -884,7 +883,7 @@ export default function Home() {
                                     color: "black",
                                   }}
                                 >
-                                  BAlANCE
+                                  BALANCE
                                 </th>
                                 <th
                                   className="py-2 px-2 border-b text-left"
