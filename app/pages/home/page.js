@@ -775,11 +775,11 @@ export default function Home() {
                         <td className="py-2 px-2 border-b border-r">
                           {row.currency}
                         </td>
-                        <td className="py-2 px-2 border-b border-r text-2xl font-medium">
+                        <td className="py-2 px-2 border-b border-r font-bold text-lg">
                           {row.balance}
                         </td>
-                        <td className="py-2 px-2 border-b border-r text-2xl font-medium">
-                          {row.usdBalance}
+                        <td className="py-2 px-2 border-b border-r font-bold text-lg ">
+                          {row.usdBalance.toFixed(3)}
                         </td>
                         <td className="py-2 px-2 border-b border-r text-center ">
                           <button
