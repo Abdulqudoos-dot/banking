@@ -775,10 +775,10 @@ export default function Home() {
                         <td className="py-2 px-2 border-b border-r">
                           {row.currency}
                         </td>
-                        <td className="py-2 px-2 border-b border-r text-2xl">
+                        <td className="py-2 px-2 border-b border-r text-2xl font-medium">
                           {row.balance}
                         </td>
-                        <td className="py-2 px-2 border-b border-r text-2xl">
+                        <td className="py-2 px-2 border-b border-r text-2xl font-medium">
                           {row.usdBalance}
                         </td>
                         <td className="py-2 px-2 border-b border-r text-center ">
