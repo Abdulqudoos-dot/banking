@@ -294,7 +294,9 @@ export default function Home() {
   };
 
   const toggleRow = async (rowId) => {
-    // toggleRow(rowId);
+    if (!expandedRows.has(rowId)) {
+      setExpandedRows(new Set());
+    }
     setExpandedRows((prevExpandedRows) => {
       const isRowExpanded = prevExpandedRows.has(rowId);
       const newExpandedRows = new Set(prevExpandedRows);

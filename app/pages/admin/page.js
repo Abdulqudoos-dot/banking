@@ -63,15 +63,17 @@ const Page = () => {
 
   const handleUserChange = async (event) => {
     event.preventDefault();
-
     const userId = event.target.value;
     setSelectedUser(userId);
-    setExpandedRows(new Set()); // Clear expanded rows when a new user is selected
+    setExpandedRows(new Set());
     setBankDetail([]);
     // The rest of your code...
   };
 
   const toggleRow = async (rowId) => {
+    if (!expandedRows.has(rowId)) {
+      setExpandedRows(new Set());
+    }
     setExpandedRows((prevExpandedRows) => {
       const newExpandedRows = new Set(prevExpandedRows);
       if (newExpandedRows.has(rowId)) {
