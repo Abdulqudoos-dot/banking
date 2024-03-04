@@ -317,7 +317,13 @@ const Page = () => {
                                       <td className="py-2 px-2 border-b border-r">
                                         {item.deposit}
                                       </td>
-                                      <td className="py-2 px-2 border-b border-r">
+                                      <td
+                                        className={`py-2 px-2 border-b border-r ${
+                                          item.payment ? "text-red-500" : ""
+                                        } ${
+                                          item.deposit ? "text-green-500" : ""
+                                        }`}
+                                      >
                                         {item.balance}
                                       </td>
                                     </tr>
