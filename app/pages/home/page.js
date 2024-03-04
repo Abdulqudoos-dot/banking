@@ -515,7 +515,7 @@ export default function Home() {
   const handleSubmit = async (e, row) => {
     e.preventDefault();
     let newBalance = parseFloat(row.balance);
-    if (!isNaN(parseFloat(formData.payment)) && newBalance > 0) {
+    if (!isNaN(parseFloat(formData.payment))) {
       newBalance -= parseFloat(formData.payment);
     }
     // Check if deposit is a valid number
@@ -775,10 +775,10 @@ export default function Home() {
                         <td className="py-2 px-2 border-b border-r">
                           {row.currency}
                         </td>
-                        <td className="py-2 px-2 border-b border-r">
+                        <td className="py-2 px-2 border-b border-r text-2xl">
                           {row.balance}
                         </td>
-                        <td className="py-2 px-2 border-b border-r">
+                        <td className="py-2 px-2 border-b border-r text-2xl">
                           {row.usdBalance}
                         </td>
                         <td className="py-2 px-2 border-b border-r text-center ">
@@ -1054,9 +1054,20 @@ export default function Home() {
                                             <td className="py-2 px-2 border-b border-r">
                                               {item.deposit}
                                             </td>
-                                            <td className="py-2 px-2 border-b border-r">
+                                            <td
+                                              className={`py-2 px-2 border-b border-r ${
+                                                item.payment
+                                                  ? "text-red-500"
+                                                  : ""
+                                              } ${
+                                                item.deposit
+                                                  ? "text-green-500"
+                                                  : ""
+                                              }`}
+                                            >
                                               {item.balance}
                                             </td>
+
                                             <td className=" px-2 py-2 border-b border-r flex pb-5">
                                               <button
                                                 onClick={() =>
