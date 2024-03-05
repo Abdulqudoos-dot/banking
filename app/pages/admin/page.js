@@ -13,7 +13,7 @@ const Page = () => {
   const [date, setDate] = useState(currentDate);
   const [selectedUser, setSelectedUser] = useState("");
   const [userList, setUserList] = useState([]);
-  const [userRecords, setUserRecords] = useState([]);
+  const [all, setAll] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -64,9 +64,18 @@ const Page = () => {
   const handleUserChange = async (event) => {
     event.preventDefault();
     const userId = event.target.value;
-    setSelectedUser(userId);
-    setExpandedRows(new Set());
-    setBankDetail([]);
+    if (userId !== "All") {
+      setAll(false);
+
+      setSelectedUser(userId);
+      setExpandedRows(new Set());
+      setBankDetail([]);
+      console.log("not all");
+    } else {
+      setAll(true);
+      setExpandedRows(new Set());
+      setBankDetail([]);
+    }
     // The rest of your code...
   };
 
@@ -80,23 +89,42 @@ const Page = () => {
         newExpandedRows.delete(rowId);
         setBankDetail([]);
       } else {
-        (async () => {
-          console.log(selectedUser);
-          const response2 = await fetch(
-            `${url}/api/v1/bank/getDetailsbyUser/${rowId}/${selectedUser}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
+        if (!all) {
+          (async () => {
+            const response2 = await fetch(
+              `${url}/api/v1/bank/getDetailsbyUser/${rowId}/${selectedUser}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response2.ok) {
+              const apiData = await response2.json();
+              console.log(apiData.data);
+              setBankDetail(apiData.data);
             }
-          );
-          if (response2.ok) {
-            const apiData = await response2.json();
-            console.log(apiData.data);
-            setBankDetail(apiData.data);
-          }
-        })();
+          })();
+        } else {
+          (async () => {
+            const response2 = await fetch(
+              `${url}/api/v1/bank/getDetailsWithoutUser/${rowId}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response2.ok) {
+              const apiData = await response2.json();
+              console.log(apiData.data);
+              setBankDetail(apiData.data);
+            }
+          })();
+        }
+
         newExpandedRows.add(rowId);
       }
       return newExpandedRows;
@@ -112,10 +140,11 @@ const Page = () => {
           <div className="text-2xl m-5 flex justify-between">
             <select
               className="border w-[240px] rounded px-2 py-1 ml-1 my-3"
-              value={selectedUser}
+              value={all ? "All" : selectedUser}
               onChange={handleUserChange}
             >
               <option value="">Select a user</option>
+              <option value={"All"}>All</option>
               {userList.map((user) => (
                 <option key={user._id} value={user._id}>
                   {user.username}
@@ -216,6 +245,17 @@ const Page = () => {
                             }
                           >
                             <tr>
+                              {all && (
+                                <th
+                                  className="py-2 px-2 border-b border-r text-left"
+                                  style={{
+                                    backgroundColor: "#C5D1F7",
+                                    color: "black",
+                                  }}
+                                >
+                                  Username
+                                </th>
+                              )}
                               <th
                                 className="py-2 px-2 border-b border-r text-left"
                                 style={{
@@ -296,6 +336,11 @@ const Page = () => {
                                 <React.Fragment key={subIndex}>
                                   {item.bankId === row._id && (
                                     <tr>
+                                      {all && (
+                                        <td className="py-2 px-2 border-b border-r">
+                                          {item.userId.username}
+                                        </td>
+                                      )}
                                       <td className="py-2 px-2 border-b border-r">
                                         {new Date(
                                           item.date

@@ -1,5 +1,5 @@
-//  depUrl = "https://banking-back-end-576fa7a10145.herokuapp.com";
+//  depUrl = "https://tallydash-tallybackend.0cpncy.easypanel.host";
 //  localUrl = "http://localhost:5000";
 
-const url = "https://tallydash-tallybackend.0cpncy.easypanel.host";
+const url = "http://localhost:5000";
 module.exports = url;
