@@ -232,7 +232,7 @@ const Page = () => {
                       {row.balance}
                     </td>
                     <td className="py-2 px-2 border-b border-r">
-                      {row.usdBalance}
+                      {row.usdBalance.toFixed(3)}
                     </td>
                   </tr>
                   {Array.isArray(bankDetail) && bankDetail && expandedRows && (
