@@ -337,11 +337,19 @@ const Page = () => {
                                   {item.bankId === row._id && (
                                     <tr>
                                       {all && (
-                                        <td className="py-2 px-2 border-b border-r">
-                                          {item.userId.username}
+                                        <td
+                                          className={`${
+                                            item.userId
+                                              ? "py-2 px-2 border-b border-r"
+                                              : "py-2 px-2 border-b border-r text-red-600"
+                                          }`}
+                                        >
+                                          {item.userId
+                                            ? item.userId.username
+                                            : "User Not Found"}
                                         </td>
                                       )}
-                                      <td className="py-2 px-2 border-b border-r">
+                                      <td className="py-2 px-2 border-b border- ">
                                         {new Date(
                                           item.date
                                         ).toLocaleDateString()}
