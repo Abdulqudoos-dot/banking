@@ -340,7 +340,14 @@ export default function Home() {
         }}
       >
         <table className="w-full bg-white border border-collapse border-gray-300">
-          <thead>
+          <thead
+            style={{
+              position: "sticky",
+              top: "0",
+              backgroundColor: "#C5D1F7",
+              zIndex: "1",
+            }}
+          >
             <tr>
               {[
                 "DATE",
@@ -423,6 +430,10 @@ export default function Home() {
               <td className="border-r pl-5">
                 <select
                   className="border w-[140px] rounded px-2 py-1 ml-1 my-3"
+                  style={{
+                    height: "30px",
+                    width: "150px",
+                  }}
                   id="category"
                   name="category"
                   value={formData.category}
@@ -606,7 +617,14 @@ export default function Home() {
       <div className="flex flex-col justify-center  p-4">
         <h1 className="text-2xl font-bold mb-4">Banking Dashboard</h1>
         <table className="w-full bg-white border border-collapse border-gray-300">
-          <thead>
+          <thead
+            style={{
+              position: "sticky",
+              top: "0",
+              backgroundColor: "#C5D1F7",
+              zIndex: "1",
+            }}
+          >
             <tr>
               <th
                 className="py-2 px-2 border-b border-r text-left"
@@ -806,295 +824,321 @@ export default function Home() {
                     expandedRows && (
                       <tr>
                         <td colSpan={9}>
-                          <table className="w-full bg-white border border-collapse border-gray-300">
-                            <thead
-                              className={
-                                expandedRows.has(row._id) ? "" : "hidden"
-                              }
-                            >
-                              <tr>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
+                          <div
+                            className="table-body-container"
+                            style={{ maxHeight: "250px", overflowY: "auto" }}
+                          >
+                            <table className="w-full bg-white border border-collapse border-gray-300">
+                              <thead
+                                className={
+                                  expandedRows.has(row._id) ? "" : "hidden"
+                                }
+                                style={{
+                                  position: "sticky",
+                                  top: "0",
+                                  backgroundColor: "#C5D1F7",
+                                  zIndex: "1",
+                                }}
+                              >
+                                <tr
                                   style={{
+                                    position: "sticky",
+                                    top: "0",
                                     backgroundColor: "#C5D1F7",
-                                    color: "black",
+                                    zIndex: "1",
                                   }}
                                 >
-                                  DATE
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  CHECK
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  PAYEE
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  MEMO
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  CATEGORY
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  PAYMENT
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b border-r text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  DEPOSIT
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  BALANCE
-                                </th>
-                                <th
-                                  className="py-2 px-2 border-b text-left"
-                                  style={{
-                                    backgroundColor: "#C5D1F7",
-                                    color: "black",
-                                  }}
-                                >
-                                  ENTRY
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {bankDetail.map((item, subIndex) => {
-                                return (
-                                  <React.Fragment key={subIndex}>
-                                    {item.bankId === row._id && (
-                                      <tr>
-                                        {editingDetailIndex === item._id ? (
-                                          <>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.date}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "date",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.checkNo}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "checkNo",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.payee}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "payee",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.memo}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "memo",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={
-                                                  editedDetailData.category
-                                                }
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "category",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.payment}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "payment",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.deposit}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "deposit",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              <input
-                                                type="text"
-                                                value={editedDetailData.balance}
-                                                onChange={(e) =>
-                                                  handleDetailEditChange(
-                                                    "balance",
-                                                    e.target.value
-                                                  )
-                                                }
-                                                className="border rounded px-2 py-1 w-full"
-                                              />
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r flex pb-5">
-                                              <button
-                                                onClick={() =>
-                                                  handleDetailEdit(item, row)
-                                                }
-                                                className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1 w-full"
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      /* Ensure the heading stays above the scrolling content */
+                                    }}
+                                  >
+                                    DATE
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    CHECK
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    PAYEE
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    MEMO
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    CATEGORY
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    PAYMENT
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b border-r text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    DEPOSIT
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    BALANCE
+                                  </th>
+                                  <th
+                                    className="py-2 px-2 border-b text-left"
+                                    style={{
+                                      backgroundColor: "#C5D1F7",
+                                      color: "black",
+                                    }}
+                                  >
+                                    ENTRY
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {bankDetail.map((item, subIndex) => {
+                                  return (
+                                    <React.Fragment key={subIndex}>
+                                      {item.bankId === row._id && (
+                                        <tr>
+                                          {editingDetailIndex === item._id ? (
+                                            <>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={editedDetailData.date}
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "date",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    editedDetailData.checkNo
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "checkNo",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={editedDetailData.payee}
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "payee",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={editedDetailData.memo}
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "memo",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    editedDetailData.category
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "category",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    editedDetailData.payment
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "payment",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    editedDetailData.deposit
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "deposit",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    editedDetailData.balance
+                                                  }
+                                                  onChange={(e) =>
+                                                    handleDetailEditChange(
+                                                      "balance",
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  className="border rounded px-2 py-1 w-full"
+                                                />
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r flex pb-5">
+                                                <button
+                                                  onClick={() =>
+                                                    handleDetailEdit(item, row)
+                                                  }
+                                                  className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1 w-full"
+                                                >
+                                                  <IoSaveOutline className="text-1xl" />
+                                                </button>
+                                                <button
+                                                  onClick={() =>
+                                                    handleDetailDelete(item._id)
+                                                  }
+                                                  className="text-red-500 hover:text-red-700"
+                                                >
+                                                  <FaTrash className="text-1xl" />
+                                                </button>
+                                              </td>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {new Date(
+                                                  item.date
+                                                ).toLocaleDateString()}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.checkNo}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.payee}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.memo}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.category}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.payment}
+                                              </td>
+                                              <td className="py-2 px-2 border-b border-r">
+                                                {item.deposit}
+                                              </td>
+                                              <td
+                                                className={`py-2 px-2 border-b border-r ${
+                                                  item.payment
+                                                    ? "text-red-500"
+                                                    : ""
+                                                } ${
+                                                  item.deposit
+                                                    ? "text-green-500"
+                                                    : ""
+                                                }`}
                                               >
-                                                <IoSaveOutline className="text-1xl" />
-                                              </button>
-                                              <button
-                                                onClick={() =>
-                                                  handleDetailDelete(item._id)
-                                                }
-                                                className="text-red-500 hover:text-red-700"
-                                              >
-                                                <FaTrash className="text-1xl" />
-                                              </button>
-                                            </td>
-                                          </>
-                                        ) : (
-                                          <>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {new Date(
-                                                item.date
-                                              ).toLocaleDateString()}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.checkNo}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.payee}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.memo}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.category}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.payment}
-                                            </td>
-                                            <td className="py-2 px-2 border-b border-r">
-                                              {item.deposit}
-                                            </td>
-                                            <td
-                                              className={`py-2 px-2 border-b border-r ${
-                                                item.payment
-                                                  ? "text-red-500"
-                                                  : ""
-                                              } ${
-                                                item.deposit
-                                                  ? "text-green-500"
-                                                  : ""
-                                              }`}
-                                            >
-                                              {item.balance}
-                                            </td>
+                                                {item.balance}
+                                              </td>
 
-                                            <td className=" px-2 py-2 border-b border-r flex pb-5">
-                                              <button
-                                                onClick={() =>
-                                                  handleDetailEdit(item, row)
-                                                }
-                                                className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1"
-                                              >
-                                                <FaEdit className="text-1xl" />
-                                              </button>
-                                              <button
-                                                onClick={() =>
-                                                  handleDetailDelete(item._id)
-                                                }
-                                                className="text-red-500 hover:text-red-700"
-                                              >
-                                                <FaTrash className="text-1xl" />
-                                              </button>
-                                            </td>
-                                          </>
-                                        )}
-                                      </tr>
-                                    )}
-                                  </React.Fragment>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                              <td className=" px-2 py-2 border-b border-r flex pb-5">
+                                                <button
+                                                  onClick={() =>
+                                                    handleDetailEdit(item, row)
+                                                  }
+                                                  className=" text-green-500 hover:text-green-700 mr-2 px-2 py-1"
+                                                >
+                                                  <FaEdit className="text-1xl" />
+                                                </button>
+                                                <button
+                                                  onClick={() =>
+                                                    handleDetailDelete(item._id)
+                                                  }
+                                                  className="text-red-500 hover:text-red-700"
+                                                >
+                                                  <FaTrash className="text-1xl" />
+                                                </button>
+                                              </td>
+                                            </>
+                                          )}
+                                        </tr>
+                                      )}
+                                    </React.Fragment>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
                         </td>
                       </tr>
                     )}
