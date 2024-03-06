@@ -161,7 +161,7 @@ const Page = () => {
               position: "sticky",
               top: "0",
               backgroundColor: "#C5D1F7",
-              zIndex: "1",
+              zIndex: "2",
             }}
           >
             <tr>
@@ -245,7 +245,7 @@ const Page = () => {
                   {Array.isArray(bankDetail) && bankDetail && expandedRows && (
                     <tr>
                       <td colSpan={9}>
-                        <div style={{ maxHeight: "270px", overflowY: "auto" }}>
+                        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                           <table className="w-full bg-white border border-collapse border-gray-300">
                             <thead
                               className={

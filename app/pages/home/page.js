@@ -622,7 +622,7 @@ export default function Home() {
               position: "sticky",
               top: "0",
               backgroundColor: "#C5D1F7",
-              zIndex: "1",
+              zIndex: "3",
             }}
           >
             <tr>
@@ -826,7 +826,7 @@ export default function Home() {
                         <td colSpan={9}>
                           <div
                             className="table-body-container"
-                            style={{ maxHeight: "250px", overflowY: "auto" }}
+                            style={{ maxHeight: "450px", overflowY: "auto" }}
                           >
                             <table className="w-full bg-white border border-collapse border-gray-300">
                               <thead
