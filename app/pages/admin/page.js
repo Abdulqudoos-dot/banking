@@ -235,10 +235,10 @@ const Page = () => {
                     <td className="py-2 px-2 border-b border-r">
                       {row.currency}
                     </td>
-                    <td className="py-2 px-2 border-b border-r">
+                    <td className="py-2 px-2 border-b border-r font-bold text-lg">
                       {row.balance}
                     </td>
-                    <td className="py-2 px-2 border-b border-r">
+                    <td className="py-2 px-2 border-b border-r font-bold text-lg">
                       {row.usdBalance.toFixed(3)}
                     </td>
                   </tr>

@@ -126,25 +126,31 @@ const AdminPage = () => {
           <thead>
             <tr className="bg-gray-200">
               <th
-                className="py-2 px-4 border-b font-medium"
+                className="py-2 px-4 border-b font-medium text-left"
                 style={{ backgroundColor: "#4069E5FF", color: "white" }}
               >
                 Username
               </th>
               <th
-                className="py-2 px-4 border-b font-medium"
+                className="py-2 px-4 border-b font-medium text-left"
                 style={{ backgroundColor: "#4069E5FF", color: "white" }}
               >
                 Email
               </th>
               <th
-                className="py-2 px-4 border-b font-medium"
+                className="py-2 px-4 border-b font-medium text-left"
+                style={{ backgroundColor: "#4069E5FF", color: "white" }}
+              >
+                Password
+              </th>
+              <th
+                className="py-2 px-4 border-b font-medium text-left"
                 style={{ backgroundColor: "#4069E5FF", color: "white" }}
               >
                 Edit
               </th>
               <th
-                className="py-2 px-4 border-b font-medium"
+                className="py-2 px-4 border-b font-medium text-left"
                 style={{ backgroundColor: "#4069E5FF", color: "white" }}
               >
                 Delete
@@ -179,6 +185,19 @@ const AdminPage = () => {
                     />
                   ) : (
                     user.email
+                  )}
+                </td>
+                <td className="border p-2">
+                  {editingUserId === user._id ? (
+                    <input
+                      type="text"
+                      value={editedUserData.password || user.password}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
+                    />
+                  ) : (
+                    "*".repeat(user.password.length)
                   )}
                 </td>
                 <td className="border p-2">
