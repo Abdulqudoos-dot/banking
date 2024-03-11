@@ -394,11 +394,11 @@ const Page = () => {
                                         </td>
                                         <td
                                           className={`py-2 px-2 border-b border-r ${
-                                            item.payment
+                                            item.payment > 0
                                               ? "text-red-500"
                                               : "text-green-500"
                                           } ${
-                                            item.deposit
+                                            item.deposit > 0
                                               ? "text-green-500"
                                               : "text-red-500"
                                           }`}
