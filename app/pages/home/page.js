@@ -1098,10 +1098,20 @@ export default function Home() {
                                                 {item.category}
                                               </td>
                                               <td className="py-2 px-2 border-b border-r">
-                                                {item.payment}
+                                                {Number(
+                                                  item.payment
+                                                ).toLocaleString("en-US", {
+                                                  minimumFractionDigits: 2,
+                                                  maximumFractionDigits: 2,
+                                                })}
                                               </td>
                                               <td className="py-2 px-2 border-b border-r">
-                                                {item.deposit}
+                                                {Number(
+                                                  item.deposit
+                                                ).toLocaleString("en-US", {
+                                                  minimumFractionDigits: 2,
+                                                  maximumFractionDigits: 2,
+                                                })}
                                               </td>
                                               <td
                                                 className={`py-2 px-2 border-b border-r ${
@@ -1114,7 +1124,12 @@ export default function Home() {
                                                     : "text-red-500"
                                                 }`}
                                               >
-                                                {item.balance}
+                                                {Number(
+                                                  item.balance
+                                                ).toLocaleString("en-US", {
+                                                  minimumFractionDigits: 2,
+                                                  maximumFractionDigits: 2,
+                                                })}
                                               </td>
 
                                               <td className=" px-2 py-2 border-b border-r flex pb-5">
