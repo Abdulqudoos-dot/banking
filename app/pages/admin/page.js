@@ -236,10 +236,16 @@ const Page = () => {
                       {row.currency}
                     </td>
                     <td className="py-2 px-2 border-b border-r font-bold text-lg">
-                      {row.balance}
+                      {Number(row.balance).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                     <td className="py-2 px-2 border-b border-r font-bold text-lg">
-                      {row.usdBalance.toFixed(3)}
+                      {Number(row.usdBalance).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                   </tr>
                   {Array.isArray(bankDetail) && bankDetail && expandedRows && (
@@ -340,7 +346,7 @@ const Page = () => {
                                     color: "black",
                                   }}
                                 >
-                                  BAlANCE
+                                  BALANCE
                                 </th>
                               </tr>
                             </thead>
@@ -388,9 +394,13 @@ const Page = () => {
                                         </td>
                                         <td
                                           className={`py-2 px-2 border-b border-r ${
-                                            item.payment ? "text-red-500" : ""
+                                            item.payment
+                                              ? "text-red-500"
+                                              : "text-green-500"
                                           } ${
-                                            item.deposit ? "text-green-500" : ""
+                                            item.deposit
+                                              ? "text-green-500"
+                                              : "text-red-500"
                                           }`}
                                         >
                                           {item.balance}

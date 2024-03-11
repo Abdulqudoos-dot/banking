@@ -40,8 +40,8 @@ export default function Home() {
     memo: "",
     category: "",
     payment: "",
-    deposit: "",
-    balance: "",
+    deposit: 0,
+    balance: 0,
   });
   const [bankDetail, setBankDetail] = useState([]);
   let [ok, setOk] = useState(1);
@@ -429,9 +429,9 @@ export default function Home() {
               </td>
               <td className="border-r pl-5">
                 <select
-                  className="border w-[140px] rounded px-2 py-1 ml-1 my-3"
+                  className="border  rounded px-2 py-1 ml-1 my-3"
                   style={{
-                    height: "30px",
+                    height: "35px",
                     width: "150px",
                   }}
                   id="category"
@@ -794,10 +794,16 @@ export default function Home() {
                           {row.currency}
                         </td>
                         <td className="py-2 px-2 border-b border-r font-bold text-lg">
-                          {row.balance}
+                          {Number(row.balance).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </td>
-                        <td className="py-2 px-2 border-b border-r font-bold text-lg ">
-                          {row.usdBalance.toFixed(3)}
+                        <td className="py-2 px-2 border-b border-r font-bold text-lg">
+                          {Number(row.usdBalance).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </td>
                         <td className="py-2 px-2 border-b border-r text-center ">
                           <button
@@ -1101,11 +1107,11 @@ export default function Home() {
                                                 className={`py-2 px-2 border-b border-r ${
                                                   item.payment
                                                     ? "text-red-500"
-                                                    : ""
+                                                    : "text-green-500"
                                                 } ${
                                                   item.deposit
                                                     ? "text-green-500"
-                                                    : ""
+                                                    : "text-red-500"
                                                 }`}
                                               >
                                                 {item.balance}
