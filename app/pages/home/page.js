@@ -127,7 +127,6 @@ export default function Home() {
           setData((prevData) => {
             const newData = prevData.map((item) => {
               if (item._id === rowId) {
-                console.log({ ...updatedData.data });
                 return { ...item, ...updatedData.data };
               }
               return item;
@@ -212,18 +211,45 @@ export default function Home() {
           const updatedData = await updateDetailresponse.json();
           let newBalance = parseFloat(row.balance);
 
-          if (!isNaN(parseFloat(editedDetailData.payment)) && newBalance > 0) {
-            newBalance -= parseFloat(editedDetailData.payment);
-          }
-          // Check if deposit is a valid number
-          if (!isNaN(parseFloat(editedDetailData.deposit))) {
-            newBalance += parseFloat(editedDetailData.deposit);
+          if (
+            editedDetailData.payment !== detail.payment &&
+            !isNaN(parseFloat(editedDetailData.payment))
+          ) {
+            newBalance -= parseFloat(editedDetailData.payment); // Corrected subtraction operation
+            const updatedRow = { ...row, balance: newBalance.toString() };
+            setData((prevData) =>
+              prevData.map((item) => (item._id === row._id ? updatedRow : item))
+            );
+            const updatedDetail = {
+              ...detail,
+              payment: editedDetailData.payment,
+            };
+            setBankDetail((prevData) =>
+              prevData.map((item) =>
+                item._id === detail._id ? updatedDetail : item
+              )
+            );
+          } else if (
+            editedDetailData.deposit !== detail.deposit &&
+            !isNaN(parseFloat(editedDetailData.deposit))
+          ) {
+            newBalance += parseFloat(editedDetailData.deposit); // Corrected addition operation
+            const updatedRow = { ...row, balance: newBalance.toString() };
+            setData((prevData) =>
+              prevData.map((item) => (item._id === row._id ? updatedRow : item))
+            );
+            const updatedDetail = {
+              ...detail,
+              deposit: editedDetailData.deposit,
+            };
+            setBankDetail((prevData) =>
+              prevData.map((item) =>
+                item._id === detail._id ? updatedDetail : item
+              )
+            );
+          } else {
           }
 
-          const updatedRow = { ...row, balance: newBalance.toString() };
-          setData((prevData) =>
-            prevData.map((item) => (item._id === row._id ? updatedRow : item))
-          );
           const bankResponse = await fetch(
             `${url}/api/v1/bank/getBank/${row._id}`,
             {
@@ -277,13 +303,33 @@ export default function Home() {
             });
             return newData;
           });
-          const updatedDetail = { ...detail, balance: newBalance.toString() };
-          setBankDetail((prevData) =>
-            prevData.map((item) =>
-              item._id === detail._id ? updatedDetail : item
-            )
-          );
-          console.log("Data updated successfully:", updatedData);
+
+          if (
+            (editedDetailData.deposit !== detail.deposit &&
+              !isNaN(parseFloat(editedDetailData.deposit))) ||
+            (editedDetailData.payment !== detail.payment &&
+              !isNaN(parseFloat(editedDetailData.payment))) ||
+            editedData
+          ) {
+            const updatedDetail = {
+              ...detail,
+              balance: newBalance.toString(),
+              deposit: editedDetailData.deposit,
+              payment: editedDetailData.payment,
+              checkNo: editedDetailData.checkNo,
+              category: editedDetailData.category,
+              date: editedDetailData.date,
+              payee: editedDetailData.payee,
+              memo: editedDetailData.memo,
+            };
+            setBankDetail((prevData) =>
+              prevData.map((item) =>
+                item._id === detail._id ? updatedDetail : item
+              )
+            );
+          }
+
+          // console.log("Data updated successfully:", updatedData);
         } else {
           // console.error("Failed to update data:", response.statusText);
         }

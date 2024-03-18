@@ -1,9 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import url from "@/utils/url";
 import AdminNavbar from "@/components/AdminNavbar";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -14,6 +17,8 @@ const Page = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [userList, setUserList] = useState([]);
   const [all, setAll] = useState(false);
+
+  const tableRef = useRef(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -102,7 +107,7 @@ const Page = () => {
             );
             if (response2.ok) {
               const apiData = await response2.json();
-              console.log(apiData.data);
+              console.log("data of a user   =>" + JSON.stringify(apiData.data));
               setBankDetail(apiData.data);
             }
           })();
@@ -130,6 +135,83 @@ const Page = () => {
       return newExpandedRows;
     });
   };
+  const exportToPDF = () => {
+    const input = tableRef.current;
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Add image to PDF
+      // pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+      // Add table data to PDF
+      data.forEach((row, index) => {
+        pdf.autoTable({
+          startY: imgHeight + 10 + index * 20,
+          head: [
+            [
+              "Bank Name",
+              "Account Number",
+              "Location",
+              "Currency",
+              "Balance",
+              "Balance in USD",
+            ],
+          ],
+          body: [
+            [
+              row.bankName,
+              row.acNo,
+              row.location,
+              row.currency,
+              row.balance,
+              row.usdBalance,
+            ],
+          ],
+        });
+
+        // Add bankDetail data for the current row
+        bankDetail.forEach((item) => {
+          if (item.bankId === row._id) {
+            pdf.autoTable({
+              head: [
+                [
+                  "Username",
+                  "DATE",
+                  "CHECK",
+                  "PAYEE",
+                  "MEMO",
+                  "CATEGORY",
+                  "PAYMENT",
+                  "DEPOSIT",
+                  "BALANCE",
+                ],
+              ],
+              body: [
+                [
+                  all && item.userId ? item.userId.username : "User Not Found",
+                  new Date(item.date).toLocaleDateString(),
+                  item.checkNo,
+                  item.payee,
+                  item.memo,
+                  item.category,
+                  item.payment,
+                  item.deposit,
+                  item.balance,
+                ],
+              ],
+            });
+          }
+        });
+      });
+
+      // Save PDF
+      pdf.save("table.pdf");
+    });
+  };
 
   return (
     <>
@@ -155,7 +237,11 @@ const Page = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center p-4">
-        <table className="w-full bg-white border border-collapse border-gray-300">
+        <button onClick={exportToPDF}>Export to PDF</button>
+        <table
+          ref={tableRef}
+          className="w-full bg-white border border-collapse border-gray-300"
+        >
           <thead
             style={{
               position: "sticky",
